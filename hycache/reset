@@ -1,0 +1,4 @@
+rm -r schfs_root/ssd/* schfs_root/hdd/*
+rm schfs.log
+rm schfs_mount/*
+

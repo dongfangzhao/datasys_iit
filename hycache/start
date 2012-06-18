@@ -1,0 +1,4 @@
+#!/bin/sh
+
+rm ./schfs_mount/*
+./schfs -o allow_other -o direct_io schfs_root schfs_mount
