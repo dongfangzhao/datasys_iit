@@ -1,0 +1,13 @@
+Author: dongfang@ieee.org
+Date: 06/27/2012
+
+Update history:
+  	06/27/2012: read with UDT
+	06/01/2012: read/write with LFTP
+	05/22/2012: read/write with SCP
+
+To use UDT-based file transfer, you need to setup the an environment variable to import all the depedent libraries:
+export $LD_LIBRARY_PATH=.:../src:./udt4_c/ffsnet:./udt4_c/src:./src/udt4_c/ffsnet:/home/dongfang/fusionFS/src/udt4_c/ffsnet/:/home/dongfang/fusionFS/src/udt4_c/src
+
+The wrapper of C++ libraries to C programs have some warning issues, which is fine for now. E.g.: 
+fusionfs.c:122:2: warning: implicit declaration of function "ffs_recvfile_c" [-Wimplicit-function-declaration]
