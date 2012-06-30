@@ -1,0 +1,18 @@
+06/30/2012, dzhao8@iit.edu
+
+Objective
+To test the compatibility between C and C++ for serialization
+
+Prerequisite
+1. Install Google Protocol Buffer (GPB) from here: https://developers.google.com/protocol-buffers/
+2. Install the C binding of GPB from here: http://code.google.com/p/protobuf-c/
+
+Files
+1. pbc_test.c: pack data to a file; unpack a file to data
+2. pbcpp_test.cpp: same as above
+3. metac.proto/meta.proto: the structure of data
+
+Compilation
+1. Generate the C header/source for packing: protoc-c metac.proto --c_out=./ 
+2. Generate the C++ header/source for packing: proto meta.proto --cpp_out=./
+3. Followed the header comments of pbc_test.c and pbcpp_test.cpp. You may need to comment out the second half of each file to make sure the files are generated before trying to read.
