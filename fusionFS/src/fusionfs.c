@@ -119,7 +119,10 @@ int fusion_getattr(const char *path, struct stat *statbuf) {
 
 	/* DFZ: test udt4 transfer */
 	//system(cmd_ftp);
-	ffs_recvfile_c("udt", "fusion.cs.iit.edu", "9000", "tmpdir/tmpfile", local_pathname);
+	char remote_pathname[PATH_MAX];
+	strcpy(remote_pathname, "ffsroot");
+	strcat(remote_pathname, path);
+	ffs_recvfile_c("udt", "fusion.cs.iit.edu", "9000", remote_pathname, local_pathname);
 
 	/* DFZ: debug info */
 	log_msg("\n =====DFZ debug: cmd_ftp = %s \n", cmd_ftp);
