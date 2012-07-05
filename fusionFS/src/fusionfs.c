@@ -4,6 +4,7 @@
  * Author: dongfang@ieee.org
  *
  * Update history:
+ *  07/05/2012: hsearch replaced by ZHT
  * 	06/27/2012: read with UDT
  * 	06/01/2012: read/write with LFTP
  * 	05/22/2012: read/write with SCP
@@ -106,7 +107,7 @@ int fusion_getattr(const char *path, struct stat *statbuf) {
 	strcpy(cmd_rm, "rm ");
 	strcat(cmd_rm, local_pathname);
 
-	system(cmd_rm);
+//	system(cmd_rm);
 
 	/* DFZ: construct FTP cmd */
 	char cmd_ftp[PATH_MAX];
@@ -122,14 +123,14 @@ int fusion_getattr(const char *path, struct stat *statbuf) {
 	char remote_pathname[PATH_MAX];
 	strcpy(remote_pathname, "ffsroot");
 	strcat(remote_pathname, path);
-	ffs_recvfile_c("udt", "fusion.cs.iit.edu", "9000", remote_pathname, local_pathname);
+	//ffs_recvfile_c("udt", "fusion.cs.iit.edu", "9999", remote_pathname, local_pathname);
 
 	/* DFZ: debug info */
-	log_msg("\n =====DFZ debug: cmd_ftp = %s \n", cmd_ftp);
+//	log_msg("\n =====DFZ debug: cmd_ftp = %s \n", cmd_ftp);
 
 	/* DFZ: lstat the local temp file */
-	retstat = lstat(local_pathname, statbuf);
-	//retstat = lstat(fpath, statbuf); 
+	//retstat = lstat(local_pathname, statbuf);
+	retstat = lstat(fpath, statbuf);
 
 	if (retstat != 0)
 		retstat = fusion_error("fusion_getattr lstat");
@@ -738,36 +739,41 @@ int fusion_opendir(const char *path, struct fuse_file_info *fi) {
 int fusion_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		off_t offset, struct fuse_file_info *fi) {
 	int retstat = 0;
-//	DIR *dp;
-//	struct dirent *de;
+	DIR *dp;
+	struct dirent *de;
 
 	log_msg(
 			"\nfusion_readdir(path=\"%s\", buf=0x%08x, filler=0x%08x, offset=%lld, fi=0x%08x)\n",
 			path, buf, filler, offset, fi);
-//	// once again, no need for fullpath -- but note that I need to cast fi->fh
-//	dp = (DIR *) (uintptr_t) fi->fh;
-//
-//	// Every directory contains at least two entries: . and ..  If my
-//	// first call to the system readdir() returns NULL I've got an
-//	// error; near as I can tell, that's the only condition under
-//	// which I can get an error from readdir()
-//	de = readdir(dp);
-//	if (de == 0) {
-//		retstat = fusion_error("fusion_readdir readdir");
-//		return retstat;
-//	}
-//
-//	// This will copy the entire directory into the buffer.  The loop exits
-//	// when either the system readdir() returns NULL, or filler()
-//	// returns something non-zero.  The first case just means I've
-//	// read the whole directory; the second means the buffer is full.
-//	do {
-//		log_msg("calling filler with name %s\n", de->d_name);
-//		if (filler(buf, de->d_name, NULL, 0) != 0) {
-//			log_msg("    ERROR fusion_readdir filler:  buffer full");
-//			return -ENOMEM;
-//		}
-//	} while ((de = readdir(dp)) != NULL);
+	// once again, no need for fullpath -- but note that I need to cast fi->fh
+	dp = (DIR *) (uintptr_t) fi->fh;
+
+	// Every directory contains at least two entries: . and ..  If my
+	// first call to the system readdir() returns NULL I've got an
+	// error; near as I can tell, that's the only condition under
+	// which I can get an error from readdir()
+	de = readdir(dp);
+	if (de == 0) {
+		retstat = fusion_error("fusion_readdir readdir");
+		return retstat;
+	}
+
+	// This will copy the entire directory into the buffer.  The loop exits
+	// when either the system readdir() returns NULL, or filler()
+	// returns something non-zero.  The first case just means I've
+	// read the whole directory; the second means the buffer is full.
+	do {
+		log_msg("calling filler with name %s\n", de->d_name);
+		if (filler(buf, de->d_name, NULL, 0) != 0) {
+			log_msg("    ERROR fusion_readdir filler:  buffer full");
+			return -ENOMEM;
+		}
+	} while ((de = readdir(dp)) != NULL);
+
+	/* test to loopup an entry in ZHT */
+	const char *val = zht_lookup("key");
+	log_msg("\n==============DFZ debug: fusion_readdir(): zht_lookup('key') = %s \n", val);
+
 
 	/*
 	 * DFZ: use hash table to maintain meta data
@@ -778,16 +784,16 @@ int fusion_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 	 * need a dedicated hashtable data structure.
 	 */
 
-	ep = ht_search("/tmpfile");
-	if ((ENTRY*)0 != ep)
-		log_msg("\n =====DFZ debug: ep->key = %s, ep->data = %s (after 'ht_search')\n", ep->key, ep->data);
-	else
-		log_msg("\n =====DFZ debug: not found '/tmpfile' \n ");
+//	ep = ht_search("/tmpfile");
+//	if ((ENTRY*)0 != ep)
+//		log_msg("\n =====DFZ debug: ep->key = %s, ep->data = %s (after 'ht_search')\n", ep->key, ep->data);
+//	else
+//		log_msg("\n =====DFZ debug: not found '/tmpfile' \n ");
 	/*
 	 * DFZ: end hash table
 	 */
 
-	filler(buf, ep->data, NULL, 0);
+//	filler(buf, ep->data, NULL, 0);
 
 	log_fi(fi);
 
@@ -921,11 +927,17 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi) {
 	/*
 	 * DFZ: insert into hash table
 	 */
-	//ht_insert(path, path);
-	e.key = (char *)path;
-	e.data = (void *)path;
-	ep = hsearch(e, ENTER);
-	log_msg("\n =====DFZ debug in _create(): ep->key = %s, ep->data = %s \n", ep->key, ep->data);
+//	ht_insert(path, path);
+//	e.key = (char *)path;
+//	e.data = (void *)path;
+//	ep = hsearch(e, ENTER);
+	log_msg("\n==============DFZ debug: fusion_create(): before zht_insert() ");
+	zht_remove("key");
+	zht_insert("key", "value changed");
+	log_msg("\n==============DFZ debug: fusion_create(): after zht_insert() ");
+
+	const char *value = zht_lookup("key");
+	log_msg("\n==============DFZ debug: fusion_create(): zht_lookup('key') = %s \n", value);
 
 	return retstat;
 }
@@ -1080,14 +1092,16 @@ int main(int argc, char *argv[]) {
 	argc--;
 
 	/* DFZ: initialize the hash table */
-	hcreate(MAX_HT_ENTRY);
+	//hcreate(MAX_HT_ENTRY);
+	zht_init();
 
 	fprintf(stderr, "about to call fuse_main\n");
 	fuse_stat = fuse_main(argc, argv, &fusion_oper, fusion_data);
 	fprintf(stderr, "fuse_main returned %d\n", fuse_stat);
 
 	/* DFZ: destruct the hash table */
-	hdestroy();
+	//hdestroy();
+	zht_free();
 
 	return fuse_stat;
 }

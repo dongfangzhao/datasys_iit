@@ -1,5 +1,8 @@
 /**
- * The hashtable is implemented with <search.h> for now.
+ * DFZ, 07/05/2012: added five ZHT based functions:
+ * 		zht_init(), zht_insert(), zht_lookup(), zht_remove() and zht_free()
+ *
+ * DFZ, 06/27/2012: The hashtable is implemented with <search.h> for now.
  * This will be updated with more fancy ones
  */
 
@@ -19,8 +22,61 @@
 #include <sys/types.h>
 #include <sys/xattr.h>
 
+/*DFZ: for ZHT interface */
+#include   <stdbool.h>
+#include "./zht/c_zhtclient.h"
+
 #include "log.h"
 #include "util.h"
+
+/**
+ *******************************************************************
+ ** The following five operations are imported from ZHT utilities **
+ *******************************************************************
+ */
+
+int zht_init()
+{
+	/* use TCP by default */
+	c_zht_init("./src/zht/neighbor", "./src/zht/zht.cfg", true);
+
+	/* DFZ: debug info */
+	printf("\n =====DFZ debug: %s \n", "zht_init() succeeded. ");
+
+	return 0;
+}
+
+int zht_free()
+{
+	c_zht_teardown();
+
+	/* DFZ: debug info */
+	printf("\n =====DFZ debug: %s \n", "zht_free() succeeded. ");
+
+	return 0;
+}
+
+int zht_insert(const char *key, const char *value)
+{
+	return c_zht_insert2(key, value);
+}
+
+const char* zht_lookup(const char *key)
+{
+	return c_zht_lookup2(key);
+}
+
+int zht_remove(const char *key)
+{
+	return c_zht_remove2(key);
+}
+
+/**
+ *****************************************************************************
+ ** The following 3 functions are hashtable implementations from <search.h> **
+ *****************************************************************************
+ */
+
 /**
  * Insert <key, val> into the global hash table
  *
