@@ -1,5 +1,13 @@
 Author: dongfang@ieee.org
 
+How to use fusionfs:
+1) Make sure all dependent libraries are installed and specified, e.g. echo $LD_LIBRARY_PATH 
+:/usr/local/lib:/home/dongfang/fusionFS/src/udt4_c/ffsnet/:/home/dongfang/fusionFS/src/udt4_c/src:/home/dongfang/fusionFS/src/udt4_c/ffsnet:/home/dongfang/fusionFS/src/udt4_c/src
+2) ./start_service to start the backup services
+3) ./compile to install fusionfs
+4) ./start to run fusionfs
+5) ./stop to stop fusionfs
+
 Update history:
 	07/05/2012: hsearch replaced by ZHT
   	06/27/2012: read with UDT

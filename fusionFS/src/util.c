@@ -40,8 +40,8 @@ int zht_init()
 	/* use TCP by default */
 	c_zht_init("./src/zht/neighbor", "./src/zht/zht.cfg", true);
 
-	/* DFZ: debug info */
-	printf("\n =====DFZ debug: %s \n", "zht_init() succeeded. ");
+//	/* DFZ: debug info */
+//	printf("\n =====DFZ debug: %s \n", "zht_init() succeeded. ");
 
 	return 0;
 }
@@ -50,8 +50,8 @@ int zht_free()
 {
 	c_zht_teardown();
 
-	/* DFZ: debug info */
-	printf("\n =====DFZ debug: %s \n", "zht_free() succeeded. ");
+//	/* DFZ: debug info */
+//	printf("\n =====DFZ debug: %s \n", "zht_free() succeeded. ");
 
 	return 0;
 }

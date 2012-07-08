@@ -12,7 +12,7 @@
  * To compile for a single file:
  * 		gcc -g -Wall `pkg-config fuse --cflags` -c fusionfs.c -L./udt4_c/ffsnet -lffsnet_bridger
  */
-
+ 
 #include "params.h"
 #include "util.h"
 
@@ -52,7 +52,8 @@ static int fusion_error(char *str)
 //  have the mountpoint.  I'll save it away early on in main(), and then
 //  whenever I need a path for something I'll call this to construct
 //  it.
-static void fusion_fullpath(char fpath[PATH_MAX], const char *path) {
+static void fusion_fullpath(char fpath[PATH_MAX], const char *path)
+{
 	strcpy(fpath, FUSION_DATA->rootdir);
 	strncat(fpath, path, PATH_MAX); // ridiculously long paths will
 	// break here
@@ -60,6 +61,26 @@ static void fusion_fullpath(char fpath[PATH_MAX], const char *path) {
 	log_msg(
 			"    fusion_fullpath:  rootdir = \"%s\", path = \"%s\", fpath = \"%s\"\n",
 			FUSION_DATA->rootdir, path, fpath);
+}
+
+static void fusion_vpath(char vpath[PATH_MAX], const char *path)
+{
+	strcpy(vpath, "ffsroot");
+	strncat(vpath, path, PATH_MAX); // ridiculously long paths will
+	// break here
+
+	log_msg(
+			"    fusion_vpath:  path = \"%s\", vpath = \"%s\"\n",
+			path, vpath);
+}
+
+/**
+ * Given a virtual path <path>, return the local copy <lpath> on physical FS
+ */
+static void fusion_lpath(char lpath[PATH_MAX], const char *path)
+{
+	strcpy(lpath, FUSION_DATA->rootdir);
+	strncat(lpath, "/tmp", PATH_MAX);
 }
 
 ///////////////////////////////////////////////////////////
@@ -130,6 +151,12 @@ int fusion_getattr(const char *path, struct stat *statbuf) {
 
 	/* DFZ: lstat the local temp file */
 	//retstat = lstat(local_pathname, statbuf);
+
+	/* DFZ TODO: try to download the file to local */
+	char vpath[PATH_MAX];
+	fusion_vpath(vpath, path);
+	ffs_recvfile_c("udt", "localhost", "9000", vpath, fpath);
+
 	retstat = lstat(fpath, statbuf);
 
 	if (retstat != 0)
@@ -379,7 +406,8 @@ int fusion_utime(const char *path, struct utimbuf *ubuf) {
  *
  * Changed in version 2.2
  */
-int fusion_open(const char *path, struct fuse_file_info *fi) {
+int fusion_open(const char *path, struct fuse_file_info *fi)
+{
 	int retstat = 0;
 	int fd;
 	char fpath[PATH_MAX];
@@ -387,16 +415,22 @@ int fusion_open(const char *path, struct fuse_file_info *fi) {
 	log_msg("\nfusion_open(path\"%s\", fi=0x%08x)\n", path, fi);
 	fusion_fullpath(fpath, path);
 
-	/* DFZ: construct the local temp file */
-	const char *local_tmp_dir = "/tmp";
-	char local_pathname[PATH_MAX];
-	strcpy(local_pathname, FUSION_DATA->rootdir);
-	strcat(local_pathname, local_tmp_dir);
-	strcat(local_pathname, path);
+//	/* DFZ: construct the local temp file */
+//	const char *local_tmp_dir = "/tmp";
+//	char local_pathname[PATH_MAX];
+//	strcpy(local_pathname, FUSION_DATA->rootdir);
+//	strcat(local_pathname, local_tmp_dir);
+//	strcat(local_pathname, path);
+//
+//	/* DFZ: open the local temp file */
+//	fd = open(local_pathname, fi->flags);
 
-	/* DFZ: open the local temp file */
-	fd = open(local_pathname, fi->flags);
-	//fd = open(fpath, fi->flags);
+	/* DFZ: download the file to local FS */
+	char vpath[PATH_MAX];
+	fusion_vpath(vpath, path);
+	unlink(fpath);
+	ffs_recvfile_c("udt", "localhost", "9000", vpath, fpath);
+	fd = open(fpath, fi->flags);
 
 	if (fd < 0)
 		retstat = fusion_error("fusion_open open");
@@ -514,7 +548,8 @@ int fusion_statfs(const char *path, struct statvfs *statv) {
  *
  * Changed in version 2.2
  */
-int fusion_flush(const char *path, struct fuse_file_info *fi) {
+int fusion_flush(const char *path, struct fuse_file_info *fi)
+{
 	int retstat = 0;
 
 	log_msg("\nfusion_flush(path=\"%s\", fi=0x%08x)\n", path, fi);
@@ -550,11 +585,11 @@ int fusion_release(const char *path, struct fuse_file_info *fi)
 	retstat = close(fi->fh);
 
 	// /* DFZ: construct the local temp file */
-	const char *local_tmp_dir = "/tmp";
-	char local_pathname[PATH_MAX];
-	strcpy(local_pathname, FUSION_DATA->rootdir);
-	strcat(local_pathname, local_tmp_dir);
-	strcat(local_pathname, path);
+//	const char *local_tmp_dir = "/tmp";
+//	char local_pathname[PATH_MAX];
+//	strcpy(local_pathname, FUSION_DATA->rootdir);
+//	strcat(local_pathname, local_tmp_dir);
+//	strcat(local_pathname, path);
 
 	// /* DFZ: construct the remote pathname */
 	// const char *remote_node = "dongfang@fusion.cs.iit.edu:~/fusionFS";
@@ -573,20 +608,26 @@ int fusion_release(const char *path, struct fuse_file_info *fi)
 	// system(cmd_scp);
 
 	/* DFZ: construct the lftp command */
-	char cmd_lftp[PATH_MAX];
-	strcpy(cmd_lftp,
-			"lftp -u dongfang,zdf81IIT fusion.cs.iit.edu -e 'rm fusionFS");
-	strcat(cmd_lftp, path);
-	strcat(cmd_lftp, "; put ");
-	strcat(cmd_lftp, local_pathname);
-	strcat(cmd_lftp, " -o fusionFS");
-	strcat(cmd_lftp, path);
-	strcat(cmd_lftp, "'");
+//	char cmd_lftp[PATH_MAX];
+//	strcpy(cmd_lftp,
+//			"lftp -u dongfang,zdf81IIT fusion.cs.iit.edu -e 'rm fusionFS");
+//	strcat(cmd_lftp, path);
+//	strcat(cmd_lftp, "; put ");
+//	strcat(cmd_lftp, local_pathname);
+//	strcat(cmd_lftp, " -o fusionFS");
+//	strcat(cmd_lftp, path);
+//	strcat(cmd_lftp, "'");
 
 	/* DFZ: debug info */
 //	log_msg("\n =====DFZ debug: cmd_lftp = %s \n", cmd_lftp);
 
-	system(cmd_lftp);
+//	system(cmd_lftp);
+
+	/*DFZ: update the remote copy*/
+	char fpath[PATH_MAX], vpath[PATH_MAX];
+	fusion_fullpath(fpath, path);
+	fusion_vpath(vpath, path);
+	ffs_sendfile_c("udt", "localhost", "9000", fpath, vpath);
 	
 	return retstat;
 }
@@ -770,11 +811,6 @@ int fusion_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		}
 	} while ((de = readdir(dp)) != NULL);
 
-	/* test to loopup an entry in ZHT */
-	const char *val = zht_lookup("key");
-	log_msg("\n==============DFZ debug: fusion_readdir(): zht_lookup('key') = %s \n", val);
-
-
 	/*
 	 * DFZ: use hash table to maintain meta data
 	 *
@@ -855,6 +891,7 @@ void *fusion_init(struct fuse_conn_info *conn) {
 
 	log_msg("\nfusion_init()\n");
 
+
 	return FUSION_DATA;
 }
 
@@ -867,6 +904,8 @@ void *fusion_init(struct fuse_conn_info *conn) {
  */
 void fusion_destroy(void *userdata) {
 	log_msg("\nfusion_destroy(userdata=0x%08x)\n", userdata);
+
+	zht_free();
 }
 
 /**
@@ -896,6 +935,8 @@ int fusion_access(const char *path, int mask) {
 }
 
 /**
+ * FUSE document:
+ *
  * Create and open a file
  *
  * If the file does not exist, first create it with the specified
@@ -906,8 +947,17 @@ int fusion_access(const char *path, int mask) {
  * will be called instead.
  *
  * Introduced in version 2.5
+ *
+ * *****************************************************************
+ * DFZ:
+ * 	In fusionFS, a file creation includes the following tasks:
+ *		1) create a local temp file for possible editing
+ *		2) upload this local temp file to the remote node
+ *		3) insert a <path, vpath> to ZHT
+ *		4) update the ZHT entry of <parent path> by appending filename
  */
-int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi) {
+int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi)
+{
 	int retstat = 0;
 	char fpath[PATH_MAX];
 	int fd;
@@ -915,8 +965,8 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi) {
 	log_msg("\nfusion_create(path=\"%s\", mode=0%03o, fi=0x%08x)\n", path, mode,
 			fi);
 	fusion_fullpath(fpath, path);
-
 	fd = creat(fpath, mode);
+
 	if (fd < 0)
 		retstat = fusion_error("fusion_create creat");
 
@@ -924,20 +974,35 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi) {
 
 	log_fi(fi);
 
-	/*
-	 * DFZ: insert into hash table
-	 */
+	/*DFZ: insert <physicalpath, virtualpath> into ZHT */
+	char vpath[PATH_MAX];
+	fusion_vpath(vpath, path);
+	zht_insert(path, vpath);
+
+//	/*DFZ: transfer the empty virtual file to physical node */
+//	ffs_sendfile_c("udt", "localhost", "9000", fpath, vpath);
+
+	/*DFZ TODO: add the last filename of <path> too its parent path in ZHT*/
+
+
+//	/*
+//	 * DFZ: insert into hash table, with <search.h>
+//	 */
 //	ht_insert(path, path);
 //	e.key = (char *)path;
 //	e.data = (void *)path;
 //	ep = hsearch(e, ENTER);
-	log_msg("\n==============DFZ debug: fusion_create(): before zht_insert() ");
-	zht_remove("key");
-	zht_insert("key", "value changed");
-	log_msg("\n==============DFZ debug: fusion_create(): after zht_insert() ");
 
-	const char *value = zht_lookup("key");
-	log_msg("\n==============DFZ debug: fusion_create(): zht_lookup('key') = %s \n", value);
+///*
+// * some basic tests on zht
+// */
+//	log_msg("\n==============DFZ debug: fusion_create(): before zht_insert() ");
+//	zht_remove("key");
+//	zht_insert("key", "value changed");
+//	log_msg("\n==============DFZ debug: fusion_create(): after zht_insert() ");
+//
+//	const char *value = zht_lookup("key");
+//	log_msg("\n==============DFZ debug: fusion_create(): zht_lookup('key') = %s \n", value);
 
 	return retstat;
 }
@@ -1094,6 +1159,9 @@ int main(int argc, char *argv[]) {
 	/* DFZ: initialize the hash table */
 	//hcreate(MAX_HT_ENTRY);
 	zht_init();
+
+	/*DFZ TODO: add root dir in ZHT*/
+	zht_insert("/", " ");
 
 	fprintf(stderr, "about to call fuse_main\n");
 	fuse_stat = fuse_main(argc, argv, &fusion_oper, fusion_data);
