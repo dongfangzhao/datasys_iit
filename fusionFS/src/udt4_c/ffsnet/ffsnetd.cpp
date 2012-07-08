@@ -6,11 +6,15 @@
  * Author: dzhao8@hawk.iit.edu
  *
  * Update history:
+ * 		- 07/07/2012: better error handling - close file handle and iofs if failure occurs
  *		- 06/18/2012: initial development
  *
  * To compile this single file:
  * 		g++ ffsnetd.cpp -o ffsnetd -I../src -L../src -ludt -lstdc++ -lpthread
  *		NOTE: -I../src (similarly to -L../src) means to include the directory of the udt library, i.e. libudt.so 
+ *
+ *		You may also need to update the environment variable as:
+ *			export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:../src
  */
 
 #include <cstdlib>
@@ -115,12 +119,20 @@ void* transfile(void* usocket)
 	
 	if (is_recv) {
 		if (UDT::ERROR == UDT::recv(fhandle, (char*)&len, sizeof(int), 0)) {
+
+			UDT::close(fhandle);
+
 			cout << "recv: " << UDT::getlasterror().getErrorMessage() << endl;
+
 			return 0;
 		}
 
 		if (UDT::ERROR == UDT::recv(fhandle, file, len, 0)) {
+
+			UDT::close(fhandle);
+
 			cout << "recv: " << UDT::getlasterror().getErrorMessage() << endl;
+
 			return 0;
 		}
 		file[len] = '\0';
@@ -135,17 +147,29 @@ void* transfile(void* usocket)
 		int64_t size;
 
 		if (UDT::ERROR == UDT::recv(fhandle, (char*)&size, sizeof(int64_t), 0)) {
+
+			UDT::close(fhandle);
+			ofs.close();
+
 			cout << "send: " << UDT::getlasterror().getErrorMessage() << endl;
 			return 0;
 		}
 
 		if (size < 0) {
+
+			UDT::close(fhandle);
+			ofs.close();
+
 			cout << "cannot open file " << file << " on the server\n";
 			return 0;
 		}
 
 		/* receive the file */
 		if (UDT::ERROR == (recvsize = UDT::recvfile(fhandle, ofs, offset, size))) {
+
+			UDT::close(fhandle);
+			ofs.close();
+
 			cout << "recvfile: " << UDT::getlasterror().getErrorMessage() << endl;
 			return 0;
 		}
@@ -159,12 +183,19 @@ void* transfile(void* usocket)
 
 	/* the following is for download */
 	if (UDT::ERROR == UDT::recv(fhandle, (char*)&len, sizeof(int), 0)) {
+
+		UDT::close(fhandle);
+
 		cout << "recv: " << UDT::getlasterror().getErrorMessage() << endl;
 		return 0;
 	}
 
 	if (UDT::ERROR == UDT::recv(fhandle, file, len, 0)) {
+
+		UDT::close(fhandle);
+
 		cout << "recv: " << UDT::getlasterror().getErrorMessage() << endl;
+
 		return 0;
 	}
 	file[len] = '\0';
@@ -178,6 +209,10 @@ void* transfile(void* usocket)
 
 	/* send file size information */
 	if (UDT::ERROR == UDT::send(fhandle, (char*)&size, sizeof(int64_t), 0))	{
+
+		UDT::close(fhandle);
+		ifs.close();
+
 		cout << "send: " << UDT::getlasterror().getErrorMessage() << endl;
 		return 0;
 	}
@@ -188,6 +223,10 @@ void* transfile(void* usocket)
 	/* send the file */
 	int64_t offset = 0;
 	if (UDT::ERROR == UDT::sendfile(fhandle, ifs, offset, size)) {
+
+		UDT::close(fhandle);
+		ifs.close();
+
 		cout << "sendfile: " << UDT::getlasterror().getErrorMessage() << endl;
 		return 0;
 	}
