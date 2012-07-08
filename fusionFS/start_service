@@ -1,0 +1,4 @@
+./src/udt4_c/ffsnet/ffsnetd 1>/dev/null &  
+
+cd ./src/zht
+./server_general 50000 neighbor zht.cfg TCP 1>/dev/null &
