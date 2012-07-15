@@ -1,4 +1,5 @@
+#start the service for file transfer
 ./src/udt4_c/ffsnet/ffsnetd 1>/dev/null &  
 
-cd ./src/zht
-./server_general 50000 neighbor zht.cfg TCP 1>/dev/null &
+#start the service for ZHT server
+./src/zht/bin/server_zht 50000 ./src/zht/neighbor ./src/zht/zht.cfg TCP 1>/dev/null &

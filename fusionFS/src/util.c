@@ -1,4 +1,6 @@
 /**
+ * DFZ, 07/14/2012: change zht_lookup() interface
+ *
  * DFZ, 07/05/2012: added five ZHT based functions:
  * 		zht_init(), zht_insert(), zht_lookup(), zht_remove() and zht_free()
  *
@@ -24,7 +26,7 @@
 
 /*DFZ: for ZHT interface */
 #include   <stdbool.h>
-#include "./zht/c_zhtclient.h"
+#include "./zht/inc/c_zhtclient.h"
 
 #include "log.h"
 #include "util.h"
@@ -61,9 +63,14 @@ int zht_insert(const char *key, const char *value)
 	return c_zht_insert2(key, value);
 }
 
-const char* zht_lookup(const char *key)
+/* DFZ: This is not in use for now, need to wait for Xiaobing to change the
+ * interface
+ * */
+int zht_lookup(const char *key, char *val)
 {
-	return c_zht_lookup2(key);
+	/* TODO: val should not have the &, waiting for Xiaobing to update*/
+//	return c_zht_lookup2(key, val);
+	return 0;
 }
 
 int zht_remove(const char *key)

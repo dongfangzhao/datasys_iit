@@ -1,4 +1,4 @@
-Author: dongfang@ieee.org
+Author: dongfang.zhao@gmail.com
 
 How to use fusionfs:
 1) Make sure all dependent libraries are installed and specified, e.g. echo $LD_LIBRARY_PATH 
@@ -7,15 +7,13 @@ How to use fusionfs:
 3) ./compile to install fusionfs
 4) ./start to run fusionfs
 5) ./stop to stop fusionfs
+6) ./stop_service to stop all services
+7) `rm -rf fusion_root/*` to cleanup your playground
 
 Update history:
+	07/15/2012: started testing on single node (test_plan.txt added): directory passed; files on root directory passed 
+	07/09/2012: clean up the warnings
 	07/05/2012: hsearch replaced by ZHT
   	06/27/2012: read with UDT
 	06/01/2012: read/write with LFTP
 	05/22/2012: read/write with SCP
-
-To use UDT-based file transfer, you need to setup the an environment variable to import all the depedent libraries before you make the program:
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/dongfang/fusionFS/src/udt4_c/ffsnet/:/home/dongfang/fusionFS/src/udt4_c/src
-
-The wrapper of C++ libraries to C programs have some warning issues, which is fine for now. E.g.: 
-fusionfs.c:122:2: warning: implicit declaration of function "ffs_recvfile_c" [-Wimplicit-function-declaration]

@@ -164,6 +164,8 @@ void* transfile(void* usocket)
 			return 0;
 		}
 
+//		cout << "DFZ debug: is_recv size = " << size << endl;
+
 		/* receive the file */
 		if (UDT::ERROR == (recvsize = UDT::recvfile(fhandle, ofs, offset, size))) {
 
@@ -224,12 +226,16 @@ void* transfile(void* usocket)
 	int64_t offset = 0;
 	if (UDT::ERROR == UDT::sendfile(fhandle, ifs, offset, size)) {
 
+		/* DFZ: This error might be triggered if the file size is zero, which is fine. */
+
 		UDT::close(fhandle);
 		ifs.close();
 
 		cout << "sendfile: " << UDT::getlasterror().getErrorMessage() << endl;
 		return 0;
 	}
+
+//	cout << "DFZ debug: NON is_recv size = " << size << endl;
 
 	UDT::perfmon(fhandle, &trace);
 	/* cout << "speed = " << trace.mbpsSendRate << "Mbits/sec" << endl; */

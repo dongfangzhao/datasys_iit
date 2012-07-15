@@ -8,7 +8,7 @@ ENTRY* ht_search(const char *key);
 int zht_init();
 int zht_free();
 int zht_insert(const char *key, const char *value);
-const char* zht_lookup(const char *key);
+int zht_lookup(const char *key, char *val);
 int zht_remove(const char *key);
 
 #endif

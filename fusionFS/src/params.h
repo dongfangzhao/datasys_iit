@@ -9,6 +9,9 @@
 // writing, the most current API version is 28
 #define FUSE_USE_VERSION 28
 
+/* DFZ FusionFS Constants */
+#define ZHT_LOOKUP_FAIL 5
+
 // need this to get pwrite().  I have to use setvbuf() instead of
 // setlinebuf() later in consequence.
 #define _XOPEN_SOURCE 500

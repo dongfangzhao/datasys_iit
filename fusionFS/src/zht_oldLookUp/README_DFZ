@@ -1,0 +1,6 @@
+ZHT server:
+	1) ./simComp.sh server_general.cpp
+	2) ./server_general 50000 neighbor zht.cfg TCP &
+	
+ZHT client:
+	1) ./c_zhtclient_a.sh	
