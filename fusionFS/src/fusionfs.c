@@ -45,6 +45,9 @@
 
 int ffs_recvfile_c(const char *proto, const char *remote_ip, const char *server_port, const char *remote_filename, const char *local_filename);
 int ffs_sendfile_c(const char *proto, const char *remote_ip, const char *server_port, const char *local_filename, const char *remote_filename);
+int ffs_rmfile_c(const char *proto, const char *remote_ip, const char *server_port, const char *remote_filename);
+
+
 
 /**
  * Update <key, oldval> with <key, val>
@@ -472,8 +475,8 @@ int fusion_rmdir(const char *path)
 /**
  * Remove a file
  *
- * DFZ TODO: two ways to unlink remote files:
- * 		1) add a "unlink request" service type in the ffsnetd daemon process
+ * DFZ: two ways to unlink remote files:
+ * 		1) [Accepted] add a "unlink request" service type in the ffsnetd daemon process
  * 		2) don't touch the remote file when updating the meta data, but do a batch job in each node to
  * 			self-check dangling files
  */
@@ -496,7 +499,12 @@ int fusion_unlink(const char *path)
 	/* DFZ: remove the file entry from ZHT */
 	zht_remove(path);
 
-	/* DFZ TODO: how can I unlink a remote file */
+	/* DFZ: how can I unlink a remote file */
+	char vpath[PATH_MAX] = {0};
+	fusion_vpath(vpath, path);
+	const char *nodeaddr = "fusion.cs.iit.edu";
+	ffs_rmfile_c("udt", nodeaddr, "9000", vpath);
+
 	retstat = unlink(fpath);
 	if (retstat < 0)
 		retstat = fusion_error("fusion_unlink unlink");

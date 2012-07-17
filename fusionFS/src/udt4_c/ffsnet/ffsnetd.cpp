@@ -109,7 +109,7 @@ void* transfile(void* usocket)
 	/* aquiring file name information from client */
 	char file[1024];
 	int len;
-	int is_recv; /* 0: download, 1: upload */
+	int is_recv; /* 0: download, 1: upload, 2: remove file */
 	
 	/* get the request type: download or upload */
 	if (UDT::ERROR == UDT::recv(fhandle, (char*)&is_recv, sizeof(int), 0)) {
@@ -117,7 +117,10 @@ void* transfile(void* usocket)
 		return 0;   
 	}
 	
-	if (is_recv) {
+	/*
+	 * The following is for upload
+	 */
+	if (1 == is_recv) {
 		if (UDT::ERROR == UDT::recv(fhandle, (char*)&len, sizeof(int), 0)) {
 
 			UDT::close(fhandle);
@@ -141,7 +144,6 @@ void* transfile(void* usocket)
 		fstream ofs(file, ios::out | ios::binary | ios::trunc);
 		int64_t recvsize; 
 		int64_t offset = 0;		
-
 		
 		/* get size information */
 		int64_t size;
@@ -164,8 +166,6 @@ void* transfile(void* usocket)
 			return 0;
 		}
 
-//		cout << "DFZ debug: is_recv size = " << size << endl;
-
 		/* receive the file */
 		if (UDT::ERROR == (recvsize = UDT::recvfile(fhandle, ofs, offset, size))) {
 
@@ -176,73 +176,115 @@ void* transfile(void* usocket)
 			return 0;
 		}
 
-		UDT::close(fhandle);
-
-		ofs.close();		
-
-		return NULL;
+		ofs.close();
 	}
 
-	/* the following is for download */
-	if (UDT::ERROR == UDT::recv(fhandle, (char*)&len, sizeof(int), 0)) {
+	/*
+	 * the following is for download
+	 */
+	if (0 == is_recv) {
+		if (UDT::ERROR == UDT::recv(fhandle, (char*)&len, sizeof(int), 0)) {
 
-		UDT::close(fhandle);
+			UDT::close(fhandle);
 
-		cout << "recv: " << UDT::getlasterror().getErrorMessage() << endl;
-		return 0;
-	}
+			cout << "recv: " << UDT::getlasterror().getErrorMessage() << endl;
+			return 0;
+		}
 
-	if (UDT::ERROR == UDT::recv(fhandle, file, len, 0)) {
+		if (UDT::ERROR == UDT::recv(fhandle, file, len, 0)) {
 
-		UDT::close(fhandle);
+			UDT::close(fhandle);
 
-		cout << "recv: " << UDT::getlasterror().getErrorMessage() << endl;
+			cout << "recv: " << UDT::getlasterror().getErrorMessage() << endl;
 
-		return 0;
-	}
-	file[len] = '\0';
+			return 0;
+		}
+		file[len] = '\0';
 
-	/* open the file */
-	fstream ifs(file, ios::in | ios::binary);
+		/* open the file */
+		fstream ifs(file, ios::in | ios::binary);
 
-	ifs.seekg(0, ios::end);
-	int64_t size = ifs.tellg();
-	ifs.seekg(0, ios::beg);
+		ifs.seekg(0, ios::end);
+		int64_t size = ifs.tellg();
+		ifs.seekg(0, ios::beg);
 
-	/* send file size information */
-	if (UDT::ERROR == UDT::send(fhandle, (char*)&size, sizeof(int64_t), 0))	{
+		/* send file size information */
+		if (UDT::ERROR == UDT::send(fhandle, (char*)&size, sizeof(int64_t), 0))	{
 
-		UDT::close(fhandle);
+			UDT::close(fhandle);
+			ifs.close();
+
+			cout << "send: " << UDT::getlasterror().getErrorMessage() << endl;
+			return 0;
+		}
+
+		UDT::TRACEINFO trace;
+		UDT::perfmon(fhandle, &trace);
+
+		/* send the file */
+		int64_t offset = 0;
+		if (UDT::ERROR == UDT::sendfile(fhandle, ifs, offset, size)) {
+
+			/* DFZ: This error might be triggered if the file size is zero, which is fine. */
+
+			UDT::close(fhandle);
+			ifs.close();
+
+			cout << "sendfile: " << UDT::getlasterror().getErrorMessage() << endl;
+			return 0;
+		}
+
+		UDT::perfmon(fhandle, &trace);
+		/* cout << "speed = " << trace.mbpsSendRate << "Mbits/sec" << endl; */
+
 		ifs.close();
-
-		cout << "send: " << UDT::getlasterror().getErrorMessage() << endl;
-		return 0;
 	}
 
-	UDT::TRACEINFO trace;
-	UDT::perfmon(fhandle, &trace);
+	/*
+	 * The following is for remove files
+	 */
+	if (2 == is_recv) {
 
-	/* send the file */
-	int64_t offset = 0;
-	if (UDT::ERROR == UDT::sendfile(fhandle, ifs, offset, size)) {
+		/*receive the length of the filename to be removed*/
+		if (UDT::ERROR == UDT::recv(fhandle, (char*)&len, sizeof(int), 0)) {
 
-		/* DFZ: This error might be triggered if the file size is zero, which is fine. */
+			UDT::close(fhandle);
 
-		UDT::close(fhandle);
-		ifs.close();
+			cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
 
-		cout << "sendfile: " << UDT::getlasterror().getErrorMessage() << endl;
-		return 0;
+			return 0;
+		}
+
+		/*receive the filename string*/
+		if (UDT::ERROR == UDT::recv(fhandle, file, len, 0)) {
+
+			UDT::close(fhandle);
+
+			cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
+
+			return 0;
+		}
+		file[len] = '\0';
+
+		/*remove the file*/
+		int stat = unlink(file);
+		if (stat < 0) {
+			UDT::close(fhandle);
+			cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
+		}
+
+		/*send return status: success or fail*/
+		int success = (stat < 0)? 1: 0;
+		if (UDT::ERROR == UDT::send(fhandle, (char*)&success, sizeof(int), 0))	{
+			cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
+			return 0;
+		}
 	}
 
-//	cout << "DFZ debug: NON is_recv size = " << size << endl;
-
-	UDT::perfmon(fhandle, &trace);
-	/* cout << "speed = " << trace.mbpsSendRate << "Mbits/sec" << endl; */
-
+	/*clean up*/
 	UDT::close(fhandle);
 
-	ifs.close();
+
 
 	return NULL;
 }

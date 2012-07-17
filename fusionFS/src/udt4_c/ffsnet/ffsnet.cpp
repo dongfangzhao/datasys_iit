@@ -29,6 +29,65 @@
 using namespace std;
 
 /*
+ * request a remote node to remove a filename, blocked until success
+ */
+int
+ffs_rmfile(const char *proto, const char *remote_ip, const char *server_port, const char *remote_filename)
+{
+	/*connect to ffsnetd*/
+	UDT::startup();
+
+	struct addrinfo hints, *peer;
+
+	memset(&hints, 0, sizeof(struct addrinfo));
+	hints.ai_flags = AI_PASSIVE;
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_STREAM;
+
+	UDTSOCKET fhandle = UDT::socket(hints.ai_family, hints.ai_socktype, hints.ai_protocol);
+
+	if (0 != getaddrinfo(remote_ip, server_port, &hints, &peer)) {
+		cout << "incorrect server/peer address. " << remote_ip << ":" << server_port << endl;
+		return -1;
+	}
+
+	if (UDT::ERROR == UDT::connect(fhandle, peer->ai_addr, peer->ai_addrlen)) {
+		cout << "connect: " << UDT::getlasterror().getErrorMessage() << endl;
+		return -1;
+	}
+
+	freeaddrinfo(peer);
+
+	/*send request type, i.e. 2 for rmfile*/
+	int two = 2;
+	if (UDT::ERROR == UDT::send(fhandle, (char*)&two, sizeof(int), 0))	{
+		cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
+		return -1;
+	}
+
+	/*send the length of the filename to be removed*/
+	int len = strlen(remote_filename);
+	if (UDT::ERROR == UDT::send(fhandle, (char*)&len, sizeof(int), 0)) {
+		cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
+		return -1;
+	}
+
+	/*send the filename to be removed*/
+	if (UDT::ERROR == UDT::send(fhandle, remote_filename, len, 0)) {
+		cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
+		return -1;
+	}
+
+	/*wait for the return status of ffsnetd daemon*/
+	int stat;
+	if (UDT::ERROR == UDT::recv(fhandle, (char*)&stat, sizeof(int), 0)) {
+		cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
+		return 0;
+	} else
+		return stat;
+}
+
+/*
  * wrapper for download
  */
 int 

@@ -19,12 +19,15 @@
 int main(int argc, char* argv[])
 {
 	if ((argc != 6) || (0 == atoi(argv[2]))) {
-		printf("usage: ffsnet_test_c server_ip server_port remote_filename local_filename [download?0:1] \n");
+		printf("usage: ffsnet_test_c server_ip server_port remote_filename local_filename [0-download; 1-upload; 2-rmfile] \n");
 		return -1;
 	}
 
-	if (!atoi(argv[5])) /* 0-download, 1-upload */
+	if (!atoi(argv[5])) /* 0-download, 1-upload, 2-rmfile */
 		ffs_recvfile_c("udt", argv[1], argv[2], argv[3], argv[4]);
-	else
+	else if (1 == atoi(argv[5]))
 		ffs_sendfile_c("udt", argv[1], argv[2], argv[4], argv[3]);
+	else if (2 == atoi(argv[5]))
+		ffs_rmfile_c("udt", argv[1], argv[2], argv[3]);
+
 }
