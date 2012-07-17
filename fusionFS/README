@@ -1,19 +1,38 @@
 Author: dongfang.zhao@gmail.com
 
+What is working
+	- File create/open/read/write/close/remove
+	- Direcotry create/read/remove
+	
+What is NOT working
+	- File rename/link/slink
+	- Directory rename 
+
 How to use fusionfs:
-1) Make sure all dependent libraries are installed and specified, e.g. echo $LD_LIBRARY_PATH 
-:/usr/local/lib:/home/dongfang/fusionFS/src/udt4_c/ffsnet/:/home/dongfang/fusionFS/src/udt4_c/src:/home/dongfang/fusionFS/src/udt4_c/ffsnet:/home/dongfang/fusionFS/src/udt4_c/src
-2) ./start_service to start the backup services
-3) ./compile to install fusionfs
-4) ./start to run fusionfs
-5) ./stop to stop fusionfs
-6) ./stop_service to stop all services
-7) `rm -rf fusion_root/*` to cleanup your playground
+	1) Make sure all dependent libraries are installed and specified, e.g. echo $LD_LIBRARY_PATH 
+	:/usr/local/lib:/home/dongfang/fusionFS/src/udt4_c/ffsnet/:/home/dongfang/fusionFS/src/udt4_c/src:/home/dongfang/fusionFS/src/udt4_c/ffsnet:/home/dongfang/fusionFS/src/udt4_c/src
+	2) ./start_service to start the backup services
+	3) ./compile to install fusionfs
+	4) ./start to run fusionfs
+	5) ./stop to stop fusionfs
+	6) ./stop_service to stop all services
+	7) `rm -rf fusion_root/*` to cleanup your playground
 
 Update history:
+	07/16/2012: all one-node test cases have passed over two nodes - Fedora and Fusion.
 	07/15/2012: started testing on single node (test_plan.txt added): directory passed; files on root directory passed 
 	07/09/2012: clean up the warnings
 	07/05/2012: hsearch replaced by ZHT
   	06/27/2012: read with UDT
 	06/01/2012: read/write with LFTP
 	05/22/2012: read/write with SCP
+
+TODO:
+	*Support directory hierarchy on physical node
+		- Add two services to ffsnetd: `create dir` and `remove dir`
+		- Whenever a directory is modified in ZHT, the initiator should call the above service(s)
+	*Support strict consistency for remote file removal
+		- Add one service to ffsnetd: `remove file`
+		- Whenever a file is removed from a ZHT, the initiator should make a request to the (remote) node to remove the physical file as well
+	*Support remote rename
+		- Add service to ffsnetd `rename file`

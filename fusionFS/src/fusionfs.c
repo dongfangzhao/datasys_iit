@@ -295,7 +295,14 @@ int fusion_getattr(const char *path, struct stat *statbuf)
 		 *
 		 * 		Or, maybe we can just keep the full hierarchy in the local node
 		 * */
-		ffs_recvfile_c("udt", "localhost", "9000", vpath, fpath);
+		/*
+		 * DFZ: now I'm testing on two nodes, so for the nontrivial case, I'll just make sure the
+		 * 		remote node of the second argument is the other machine, i.e. fusion.cs.iit.edu.
+		 * 		That is, we just presume the file would be on fusion.cs.iit.edu, as should be
+		 * 		calculated from Tony's hash() function in zht_util.cpp.
+		 */
+		const char *nodeaddr = "fusion.cs.iit.edu";
+		ffs_recvfile_c("udt", nodeaddr, "9000", vpath, fpath);
 	}
 
 	retstat = lstat(fpath, statbuf);
@@ -853,7 +860,15 @@ int fusion_release(const char *path, struct fuse_file_info *fi)
 	fusion_vpath(vpath, path);
 
 	/*DFZ TODO: similar to _getattr(), both localhost and fpath will need to be updated */
-	ffs_sendfile_c("udt", "localhost", "9000", fpath, vpath);
+
+	/*
+	 * DFZ: now I'm testing on two nodes, so for the nontrivial case, I'll just make sure the
+	 * 		remote node of the second argument is the other machine, i.e. fusion.cs.iit.edu.
+	 * 		That is, we just presume the file would be on fusion.cs.iit.edu, as should be
+	 * 		calculated from Tony's hash() function in zht_util.cpp.
+	 */
+	const char *nodeaddr = "fusion.cs.iit.edu";
+	ffs_sendfile_c("udt", nodeaddr, "9000", fpath, vpath);
 	unlink(fpath);
 
 	return retstat;
