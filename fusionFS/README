@@ -30,8 +30,12 @@ Update history:
 	05/22/2012: read/write with SCP
 
 TODO:
-	*Support directory hierarchy on physical node
-		- Add two services to ffsnetd: `create dir` and `remove dir`
-		- Whenever a directory is modified in ZHT, the initiator should call the above service(s)
 	*Support remote rename
 		- Add service to ffsnetd `rename file`
+	*Update ZHT for new _lookup() signature and return code
+	*Move zht_() functions out of fusionfs.c
+
+Question:
+	*If we support hierarchical directory on physical file system, then there must be multiple
+	copies of the same directory over multiple nodes. So do we need to effectively remove these
+	physical (empty) directories?

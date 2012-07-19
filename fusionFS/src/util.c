@@ -1,4 +1,5 @@
 /**
+ *
  * DFZ, 07/14/2012: change zht_lookup() interface
  *
  * DFZ, 07/05/2012: added five ZHT based functions:
@@ -7,6 +8,12 @@
  * DFZ, 06/27/2012: The hashtable is implemented with <search.h> for now.
  * This will be updated with more fancy ones
  */
+
+/*for net facilities*/
+#include <netdb.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
 
 #include "params.h"
 
@@ -24,12 +31,31 @@
 #include <sys/types.h>
 #include <sys/xattr.h>
 
-/*DFZ: for ZHT interface */
-#include   <stdbool.h>
+/*for ZHT interface */
+#include <stdbool.h>
+#include <errno.h>
 #include "./zht/inc/c_zhtclient.h"
+
 
 #include "log.h"
 #include "util.h"
+
+/*
+ * get the ip address of the local machine
+ */
+int net_getmyip(char *addr)
+{
+	char hostname[PATH_MAX] = {0};
+	struct hostent *host = (struct hostent *) malloc(sizeof(struct hostent));
+
+	gethostname(hostname, PATH_MAX) ;
+	host = (struct hostent *) gethostbyname(hostname) ;
+
+	strcpy(addr, inet_ntoa(*((struct in_addr *)host->h_addr)));
+//	printf("IP Address : %s\n", inet_ntoa(*((struct in_addr *)host->h_addr)));
+
+	return 0;
+}
 
 /**
  *******************************************************************

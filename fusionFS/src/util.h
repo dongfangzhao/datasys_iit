@@ -11,4 +11,6 @@ int zht_insert(const char *key, const char *value);
 int zht_lookup(const char *key, char *val);
 int zht_remove(const char *key);
 
+int net_getmyip(char *ip);
+
 #endif

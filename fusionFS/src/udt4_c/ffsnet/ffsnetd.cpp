@@ -6,6 +6,8 @@
  * Author: dzhao8@hawk.iit.edu
  *
  * Update history:
+ *		- 07/18/2012: add mkdir(), this is not being used for now. It's not been tested either.
+ * 		- 07/17/2012: add rmfile()
  * 		- 07/07/2012: better error handling - close file handle and iofs if failure occurs
  *		- 06/18/2012: initial development
  *
@@ -23,6 +25,10 @@
 #include <iostream>
 #include <cstring>
 #include <udt.h>
+
+#include <linux/limits.h>
+#include <sys/stat.h>
+#include <cerrno>
 
 using namespace std;
 
@@ -109,7 +115,7 @@ void* transfile(void* usocket)
 	/* aquiring file name information from client */
 	char file[1024];
 	int len;
-	int is_recv; /* 0: download, 1: upload, 2: remove file */
+	int is_recv; /* 0: download, 1: upload, 2: remove file, 3: make dir */
 	
 	/* get the request type: download or upload */
 	if (UDT::ERROR == UDT::recv(fhandle, (char*)&is_recv, sizeof(int), 0)) {
@@ -183,6 +189,7 @@ void* transfile(void* usocket)
 	 * the following is for download
 	 */
 	if (0 == is_recv) {
+		/*get the length of the filename*/
 		if (UDT::ERROR == UDT::recv(fhandle, (char*)&len, sizeof(int), 0)) {
 
 			UDT::close(fhandle);
@@ -191,6 +198,7 @@ void* transfile(void* usocket)
 			return 0;
 		}
 
+		/*get the file name*/
 		if (UDT::ERROR == UDT::recv(fhandle, file, len, 0)) {
 
 			UDT::close(fhandle);
@@ -203,7 +211,6 @@ void* transfile(void* usocket)
 
 		/* open the file */
 		fstream ifs(file, ios::in | ios::binary);
-
 		ifs.seekg(0, ios::end);
 		int64_t size = ifs.tellg();
 		ifs.seekg(0, ios::beg);
@@ -277,14 +284,55 @@ void* transfile(void* usocket)
 		int success = (stat < 0)? 1: 0;
 		if (UDT::ERROR == UDT::send(fhandle, (char*)&success, sizeof(int), 0))	{
 			cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
+			UDT::close(fhandle);
+			return 0;
+		}
+	}
+
+	/*
+	 * The following is to make a physical directory on the local node
+	 */
+	if (3 == is_recv) {
+
+		/*receive the length of the directory name to be created*/
+		if (UDT::ERROR == UDT::recv(fhandle, (char*)&len, sizeof(int), 0)) {
+			UDT::close(fhandle);
+			cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
+			return 0;
+		}
+
+		/*receive the directory name*/
+		if (UDT::ERROR == UDT::recv(fhandle, file, len, 0)) {
+			UDT::close(fhandle);
+			cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
+			return 0;
+		}
+		file[len] = '\0';
+
+		/*create the directory*/
+		struct stat info;
+		int retstat = lstat(file, &info);
+		if (retstat && (ENOENT == errno)) { /*does the pathname exist?*/
+			char cmd[PATH_MAX] = {0};
+			strcpy(cmd, "mkdir -p ");
+			strcat(cmd, file);
+			system(cmd);
+
+			/*reset the status*/
+			retstat = 0;
+		}
+
+		/*send return status: success or fail*/
+		int success = (retstat < 0)? 1: 0;
+		if (UDT::ERROR == UDT::send(fhandle, (char*)&success, sizeof(int), 0))	{
+			cout << "rmfile: " << UDT::getlasterror().getErrorMessage() << endl;
+			UDT::close(fhandle);
 			return 0;
 		}
 	}
 
 	/*clean up*/
 	UDT::close(fhandle);
-
-
 
 	return NULL;
 }
