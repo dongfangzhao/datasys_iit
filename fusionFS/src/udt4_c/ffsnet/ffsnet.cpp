@@ -213,11 +213,11 @@ _recvfile_udt(const char *remote_ip, const char *server_port, const char *remote
 		return -1;
 	}
 
-	/*create the necessary paths if necessary*/
+	/*create the parent paths if necessary*/
 	char pathname[PATH_MAX] = {0};
 	const char *pch = strrchr(local_filename, '/');
 	strncpy(pathname, local_filename, pch - local_filename);
-	if (!access(pathname, F_OK)) {
+	if (access(pathname, F_OK)) {
 		char cmd[PATH_MAX] = {0};
 		strcpy(cmd, "mkdir -p ");
 		strcat(cmd, pathname);

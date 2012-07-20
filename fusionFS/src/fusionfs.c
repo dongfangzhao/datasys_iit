@@ -211,15 +211,42 @@ int fusion_getattr(const char *path, struct stat *statbuf)
 
 	if (ZHT_LOOKUP_FAIL == status) { /* if not found in ZHT */
 		log_msg("\n ===========DFZ debug: _getattr() %s does not exist \n\n", path);
+
+		/*if path is an existing directory*/
+		char dirname[PATH_MAX] = {0};
+		strcpy(dirname, path);
+		strcat(dirname, "/");
+		char *res = NULL;
+
+		log_msg("\n ===========DFZ debug: _getattr() dirname = %s. \n\n", dirname);
+
+		int stat = c_zht_lookup2(dirname, &res);
+
+		if (ZHT_LOOKUP_FAIL != stat) {
+			log_msg("\n ===========DFZ debug: _getattr() res = %s. \n\n", res);
+
+			mkdir(fpath, 0755);
+			char cmd_mkdir[PATH_MAX] = {0};
+			strcpy(cmd_mkdir, "mkdir -p ");
+			strcat(cmd_mkdir, fpath);
+			system(cmd_mkdir);
+		}
+
+		log_msg("\n ===========DFZ debug: _getattr() new directory %s/ created \n\n", fpath);
 	}
 	else { /* if file exists in ZHT */
 		log_msg("\n ===========DFZ debug: _getattr() zht_lookup() = %s. \n\n", res);
 
 		if (access(fpath, F_OK)) { /*if it isn't on this node, copy it over*/
+
 			ffs_recvfile_c("udt", res, "9000", fpath, fpath);
+
+			log_msg("\n ===========DFZ debug: _getattr() %s transferred from %s. \n\n",
+					fpath, res);
 		}
 		else {
 			/* let it be */
+			log_msg("\n ===========DFZ debug: _getattr() %s exists in local. \n\n", fpath);
 		}
 	}
 
@@ -341,6 +368,8 @@ int fusion_mkdir(const char *path, mode_t mode)
  * Remove a directory
  *
  * 		DFZ: updated for ZHT
+ *
+ * 		TODO: deleting a non-empty directory will cause some problems
  */
 int fusion_rmdir(const char *path)
 {
@@ -350,9 +379,26 @@ int fusion_rmdir(const char *path)
 	log_msg("fusion_rmdir(path=\"%s\")\n", path);
 	fusion_fullpath(fpath, path);
 
-	retstat = rmdir(fpath);
-	if (retstat < 0)
-		retstat = fusion_error("fusion_rmdir rmdir");
+	/*check ZHT if <path/> is empty */
+	char dirname[PATH_MAX] = {0};
+	strcpy(dirname, path);
+	strcat(dirname, "/");
+	char *val = NULL;
+	int stat = c_zht_lookup2(dirname, &val);
+	if (ZHT_LOOKUP_FAIL != stat
+			&& !strcmp(" ", val)) {
+		char rmcmd[PATH_MAX] = {0};
+		strcpy(rmcmd, "rm -r ");
+		strcat(rmcmd, fpath);
+		system(rmcmd);
+	}
+	else {
+		fusion_error("fusion_rmdir() directory not empty");
+		return -1;
+	}
+//	retstat = rmdir(fpath);
+//	if (retstat < 0)
+//		retstat = fusion_error("fusion_rmdir rmdir");
 
 	/* update ZHT */
 	char parentpath[PATH_MAX] = {0};
@@ -396,8 +442,8 @@ int fusion_unlink(const char *path)
 	zht_delete(dirname, fname);
 
 	/*remove the file entry from ZHT */
-	char oldaddr[PATH_MAX] = {0};
-	zht_lookup(path, oldaddr);
+	char *oldaddr = NULL;
+	c_zht_lookup2(path, &oldaddr);
 	zht_remove(path);
 
 	/*if it's a local operation, we are done here*/
@@ -583,6 +629,11 @@ int fusion_open(const char *path, struct fuse_file_info *fi)
 // can return with anything up to the amount of data requested. nor
 // with the fusexmp code which returns the amount of data also
 // returned by read.
+
+/**
+ * DFZ: for FusionFS, no need to modify _read(). The file synchronization
+ * 		is done in _getattr() and _release()
+ */
 int fusion_read(const char *path, char *buf, size_t size, off_t offset,
 		struct fuse_file_info *fi) {
 	int retstat = 0;
@@ -610,6 +661,11 @@ int fusion_read(const char *path, char *buf, size_t size, off_t offset,
  */
 // As  with read(), the documentation above is inconsistent with the
 // documentation for the write() system call.
+
+/**
+ * DFZ: for FusionFS, no need to modify _write(). The file synchronization
+ * 		is done in _getattr() and _release()
+ */
 int fusion_write(const char *path, const char *buf, size_t size, off_t offset,
 		struct fuse_file_info *fi) {
 	int retstat = 0;
@@ -715,6 +771,24 @@ int fusion_release(const char *path, struct fuse_file_info *fi)
 	log_msg("\nfusion_release(path=\"%s\", fi=0x%08x)\n", path, fi);
 	log_fi(fi);
 
+	/*is this file written?*/
+	int iswritten = 0;
+	int flags = fcntl(fi->fh, F_GETFL);
+	if (-1 == flags) {
+		/*I don't know what to do... failed to get the old flags */
+		fusion_error("_release(): fd lost. ");
+	}
+	/*
+	O_ACCMODE<0003>：读写文件操作时，用于取出flag的低2位
+	O_RDONLY<00>：只读打开
+	O_WRONLY<01>：只写打开
+	O_RDWR<02>：读写打开
+	 */
+	else if (O_ACCMODE & flags) {
+		iswritten = 1;
+	}
+
+
 	// We need to close the file.  Had we allocated any resources
 	// (buffers etc) we'd need to free them here as well.
 	retstat = close(fi->fh);
@@ -722,34 +796,31 @@ int fusion_release(const char *path, struct fuse_file_info *fi)
 	/*if this is just a local IO, we are all set*/
 	char myip[PATH_MAX] = {0};
 	net_getmyip(myip);
-	char nodeaddr[PATH_MAX] = {0};
-	zht_lookup(path, nodeaddr);
+	char *nodeaddr = NULL;
+	c_zht_lookup2(path, &nodeaddr);
 	if (!strcmp(myip, nodeaddr)) {
 		return retstat;
 	}
 
 	/*dealing with the remote copy*/
-	int flags = fcntl(fi->fh, F_GETFL);
-	if (-1 == flags) {
-		/*I don't know what to do... failed to get the old flags */
-	}
-/*
-O_ACCMODE<0003>：读写文件操作时，用于取出flag的低2位
-O_RDONLY<00>：只读打开
-O_WRONLY<01>：只写打开
-O_RDWR<02>：读写打开
- */
-	else if (O_ACCMODE & flags) { /*so it's a write mode*/
-		char oldip[PATH_MAX] = {0};
-		zht_lookup(path, oldip);
+	if (iswritten) { /*so it's a write mode*/
+		char *oldip = NULL;
+		c_zht_lookup2(path, &oldip);
 
 		/*update this file's node value in ZHT*/
 		char myip[PATH_MAX] = {0};
 		net_getmyip(myip);
 		zht_update(path, myip);
+		/*TODO: potentially, need to update the parent directory in ZHT
+		 * because the physical directory is also created in the new node*/
+
+		log_msg("\n=========DFZ debug _release(): %s unlinked from %s. \n\n", fpath, oldip);
 
 		/*remove the file from its old node*/
 		ffs_rmfile_c("udt", oldip, "9000", fpath);
+
+		log_msg("\n=========DFZ debug _release(): %s unlinked from %s. \n\n", fpath, oldip);
+
 	}
 	else { /*read-only file*/
 		/* we don't want o keep a redundant copy in local node to
@@ -757,6 +828,7 @@ O_RDWR<02>：读写打开
 		 * across different nodes. So, we remove the local file
 		 */
 		unlink(fpath);
+		log_msg("\n=========DFZ debug _release(): %s unlinked from local node. \n\n", fpath);
 	}
 
 	return retstat;
@@ -869,16 +941,23 @@ int fusion_removexattr(const char *path, const char *name) {
  */
 int fusion_opendir(const char *path, struct fuse_file_info *fi)
 {
-
-	/*DFZ TODO: this will check if <path> is a key in ZHT */
-
-
 	DIR *dp;
 	int retstat = 0;
 	char fpath[PATH_MAX] = {0};
 
 	log_msg("\nfusion_opendir(path=\"%s\", fi=0x%08x)\n", path, fi);
 	fusion_fullpath(fpath, path);
+
+	/*if path exists in ZHT, create it locally*/
+	char *res = NULL;
+	int stat = c_zht_lookup2(path, &res);
+	if (ZHT_LOOKUP_FAIL != stat) {
+		mkdir(fpath, 0775);
+	}
+	else {
+		/*TODO*/
+		fusion_error("_opendir() failed: <fpath> not found in ZHT");
+	}
 
 	dp = opendir(fpath);
 	if (dp == NULL)
@@ -920,6 +999,8 @@ int fusion_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 			path, buf, filler, offset, fi);
 
 	int retstat = 0;
+	char fpath[PATH_MAX] = {0};
+	fusion_fullpath(fpath, path);
 
 	/* append a '/' if it's not the root directory */
 	char dirname[PATH_MAX] = {0};
@@ -938,6 +1019,13 @@ int fusion_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 	else
 		log_msg("\n ===========DFZ debug: fusion_readdir() filelist = %s. \n\n", filelist);
 
+	/*If <path/> has no files, clean up the local physical path*/
+	char rmallcmd[PATH_MAX] = {0};
+	strcpy(rmallcmd, "rm -r ");
+	strcat(rmallcmd, fpath);
+	strcat(rmallcmd, "*");
+	system(rmallcmd);
+
 	char *pch = strtok((char*)filelist, " ");
 	while (pch) {
 
@@ -945,6 +1033,15 @@ int fusion_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		if (filler(buf, pch, NULL, 0) != 0) {
 			log_msg("    ERROR fusion_readdir filler:  buffer full");
 			return -ENOMEM;
+		}
+
+		/*create some dummy dirs for listing*/
+		if ('/' == *(pch + strlen(pch) - 1)) {
+			char newdir[PATH_MAX] = {0};
+			strcpy(newdir, fpath);
+			strcat(newdir, "/");
+			strcat(newdir, pch);
+			mkdir(newdir, 0775);
 		}
 
 		pch = strtok(NULL, " ");
@@ -1125,9 +1222,6 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 	char *pch = strrchr(path, '/');
 	strncpy(dirname, path, pch - path + 1);
 	log_msg("\n================DFZ debug: dirname = %s \n", dirname);
-
-//	char oldval[PATH_MAX] = {0};
-//	int stat = zht_lookup(dirname, oldval);
 	char *oldval = NULL;
 	int stat = c_zht_lookup2(dirname, &oldval);
 
@@ -1141,7 +1235,9 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 	/*insert <path, ip_addr> into ZHT */
 	char addr[PATH_MAX] = {0};
 	net_getmyip(addr);
-	zht_insert(path, addr);
+	log_msg("\n================DFZ debug _create(): addr = %s \n", addr);
+	if (zht_insert(path, addr))
+		log_msg("\n================ERROR _create(): failed to insert <%s, %s> to ZHT. \n", path, addr);
 
 	return retstat;
 }

@@ -14,6 +14,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
+#include <ifaddrs.h>
 
 #include "params.h"
 
@@ -45,14 +46,44 @@
  */
 int net_getmyip(char *addr)
 {
-	char hostname[PATH_MAX] = {0};
-	struct hostent *host = (struct hostent *) malloc(sizeof(struct hostent));
+//	char hostname[PATH_MAX] = {0};
+//	struct hostent *host = (struct hostent *) malloc(sizeof(struct hostent));
+//
+//	gethostname(hostname, PATH_MAX) ;
+//	host = (struct hostent *) gethostbyname(hostname) ;
+//
+//	strcpy(addr, inet_ntoa(*((struct in_addr *)host->h_addr)));
+////	printf("IP Address : %s\n", inet_ntoa(*((struct in_addr *)host->h_addr)));
 
-	gethostname(hostname, PATH_MAX) ;
-	host = (struct hostent *) gethostbyname(hostname) ;
+    struct ifaddrs * ifAddrStruct=NULL;
+    struct ifaddrs * ifa=NULL;
+    void * tmpAddrPtr=NULL;
 
-	strcpy(addr, inet_ntoa(*((struct in_addr *)host->h_addr)));
-//	printf("IP Address : %s\n", inet_ntoa(*((struct in_addr *)host->h_addr)));
+    getifaddrs(&ifAddrStruct);
+
+    for (ifa = ifAddrStruct; ifa != NULL; ifa = ifa->ifa_next) {
+		/*skip the loopback*/
+    	if (!strcmp("lo", ifa->ifa_name))
+			continue;
+
+        if (ifa ->ifa_addr->sa_family==AF_INET) { // check it is IP4
+            // is a valid IP4 Address
+            tmpAddrPtr=&((struct sockaddr_in *)ifa->ifa_addr)->sin_addr;
+            char addressBuffer[INET_ADDRSTRLEN];
+            inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
+//            printf("%s IP Address %s\n", ifa->ifa_name, addressBuffer);
+            strcpy(addr, addressBuffer);
+        }
+//        else if (ifa->ifa_addr->sa_family==AF_INET6) { // check it is IP6
+//            // is a valid IP6 Address
+//            tmpAddrPtr=&((struct sockaddr_in6 *)ifa->ifa_addr)->sin6_addr;
+//            char addressBuffer[INET6_ADDRSTRLEN];
+//            inet_ntop(AF_INET6, tmpAddrPtr, addressBuffer, INET6_ADDRSTRLEN);
+//            printf("%s IP Address %s\n", ifa->ifa_name, addressBuffer);
+//        }
+    }
+    if (ifAddrStruct!=NULL)
+    	freeifaddrs(ifAddrStruct);
 
 	return 0;
 }

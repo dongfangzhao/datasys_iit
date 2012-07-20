@@ -1,4 +1,4 @@
-Author: dongfang.zhao@gmail.com
+Author: dongfang.zhao@hawk.iit.edu
 
 What is working
 	- File create/open/read/write/close/remove
@@ -17,9 +17,9 @@ How to use fusionfs:
 	5) ./stop to stop fusionfs
 	6) ./stop_service to stop all services
 	7) `rm -rf fusion_root/*` to cleanup your playground
-	8) `rm -rf src/udt4_c/ffsnet/ffsroot/*` to cleanup the physical file repository
 
 Update history:
+	07/20/2012: major changes, tested on two nodes Fedora and Fusion
 	07/17/2012: remote file removal supported and tested on two nodes
 	07/16/2012: all one-node test cases have passed over two nodes - Fedora and Fusion.
 	07/15/2012: started testing on single node (test_plan.txt added): directory passed; files on root directory passed 
@@ -30,12 +30,14 @@ Update history:
 	05/22/2012: read/write with SCP
 
 TODO:
-	*Support remote rename
-		- Add service to ffsnetd `rename file`
-	*Update ZHT for new _lookup() signature and return code
-	*Move zht_() functions out of fusionfs.c
-
-Question:
-	*If we support hierarchical directory on physical file system, then there must be multiple
-	copies of the same directory over multiple nodes. So do we need to effectively remove these
-	physical (empty) directories?
+	*[critical]Update ZHT for new _lookup() signature and return code
+	*[important]Restructured code and simplified Makefile	
+		- Move zht_() functions out of fusionfs.c
+	*[important]Support remote rename
+		- Add service to ffsnetd `rename file`, or other design?
+	*[important]how to select and maintain replica nodes
+	
+Note:
+    *If you make your desktop run ffsnetd service, please make sure no firewall is blocking this service from outside request.
+		- In Fedora, you can turn off firewall by `sudo service iptables stop`
+		- Note that there's no firewall in Bluegene

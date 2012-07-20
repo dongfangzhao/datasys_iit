@@ -10,6 +10,7 @@
  *
  */
 
+int ffs_mkdir(const char *, const char *, const char *, const char *);
 int ffs_rmfile(const char *, const char *, const char *, const char *);
 int ffs_recvfile(const char *, const char *, const char *, const char *, const char *);
 int ffs_sendfile(const char *, const char *, const char *, const char *, const char *);
@@ -17,6 +18,10 @@ int ffs_sendfile(const char *, const char *, const char *, const char *, const c
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+	int ffs_mkdir_c(const char *proto, const char *remote_ip, const char *server_port, const char *remote_filename) {
+		return ffs_mkdir(proto, remote_ip, server_port, remote_filename);
+	}
 
 	int ffs_rmfile_c(const char *proto, const char *remote_ip, const char *server_port, const char *remote_filename) {
 		return ffs_rmfile(proto, remote_ip, server_port, remote_filename);
