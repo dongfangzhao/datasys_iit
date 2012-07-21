@@ -59,8 +59,6 @@ gProto: src/misc/meta.proto
 	
 clean:
 	rm -rf obj
-
-mrproper: clean
 	rm -f lib/*.a
 	rm -f lib/*.h
 	rm -f bin/server_zht

@@ -8,17 +8,25 @@ What is NOT working
 	- File rename/link/slink
 	- Directory rename 
 
+How to install fusionfs:
+	1) Make sure all dependent libraries are specified, e.g. echo $LD_LIBRARY_PATH 
+	:/usr/local/lib:/home/dongfang/fusionFS/src/ffsnet/:/home/dongfang/fusionFS/src/udt4/src
+	2) Install FUSE for your Linux distribution
+	3) Install Google Protocol Buffer 
+	4) Go to ./src/zht/ and run Makefile
+	5) Go to ./src/udt/ and run Makefile
+	6) Go to ./src/ffsnet/, run Makefile
+	7) Go to ./src, run Makefile
+
 How to use fusionfs:
-	1) Make sure all dependent libraries are installed and specified, e.g. echo $LD_LIBRARY_PATH 
-	:/usr/local/lib:/home/dongfang/fusionFS/src/udt4_c/ffsnet/:/home/dongfang/fusionFS/src/udt4_c/src:/home/dongfang/fusionFS/src/udt4_c/ffsnet:/home/dongfang/fusionFS/src/udt4_c/src
-	2) ./start_service to start the backup services
-	3) ./compile to install fusionfs
+	2) `rm -rf fusion_root/*` to cleanup your scrach data
+	3) ./start_service to start the backup services
 	4) ./start to run fusionfs
 	5) ./stop to stop fusionfs
 	6) ./stop_service to stop all services
-	7) `rm -rf fusion_root/*` to cleanup your playground
 
 Update history:
+	07/21/2012: Update ZHT for new _lookup() signature and return code, restructure code and update Makefiles
 	07/20/2012: major changes, tested on two nodes Fedora and Fusion
 	07/17/2012: remote file removal supported and tested on two nodes
 	07/16/2012: all one-node test cases have passed over two nodes - Fedora and Fusion.
@@ -30,9 +38,6 @@ Update history:
 	05/22/2012: read/write with SCP
 
 TODO:
-	*[critical]Update ZHT for new _lookup() signature and return code
-	*[important]Restructured code and simplified Makefile	
-		- Move zht_() functions out of fusionfs.c
 	*[important]Support remote rename
 		- Add service to ffsnetd `rename file`, or other design?
 	*[important]how to select and maintain replica nodes
@@ -40,4 +45,4 @@ TODO:
 Note:
     *If you make your desktop run ffsnetd service, please make sure no firewall is blocking this service from outside request.
 		- In Fedora, you can turn off firewall by `sudo service iptables stop`
-		- Note that there's no firewall in Bluegene
+		- Note that there's no firewall inside IBM Bluegene

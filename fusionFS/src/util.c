@@ -127,6 +127,8 @@ int zht_lookup(const char *key, char *val)
 {
 	/* TODO: val should not have the &, waiting for Xiaobing to update*/
 //	return c_zht_lookup2(key, val);
+	size_t len;
+	return c_zht_lookup2(key, val, &len);
 	return 0;
 }
 

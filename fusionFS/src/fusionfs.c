@@ -25,7 +25,7 @@
  * To compile for a single file:
  * 		gcc -g -Wall `pkg-config fuse --cflags` -c fusionfs.c -L./udt4_c/ffsnet -lffsnet_bridger
  */
-#include "./udt4_c/ffsnet/ffsnet.h"
+#include "./ffsnet/ffsnet.h"
 #include "params.h"
 #include "util.h"
 
@@ -82,11 +82,8 @@ int zht_update(const char *key, const char *val)
 	int insert_res = zht_insert(key, val);
 	log_msg("DFZ debug: zht_update() - insert_res = %d. \n\n", insert_res);
 
-	/*DFZ debug*/
-//	char newval[PATH_MAX] = {0};
-//	int status = zht_lookup(key, newval);
-	char *newval = NULL;
-	int status = c_zht_lookup2(key, &newval);
+	char newval[PATH_MAX] = {0};
+	int status = zht_lookup(key, newval);
 
 	log_msg("DFZ debug: zht_update() - status = %d. \n\n", status);
 
@@ -104,18 +101,13 @@ int zht_update(const char *key, const char *val)
 int zht_append(const char *key, const char *val)
 {
 	char newval[PATH_MAX] = {0};
-//	char oldval[PATH_MAX] = {0};
-//	zht_lookup(key, oldval);
 
-	char *oldval = NULL;
-	c_zht_lookup2(key, &oldval);
+	char oldval[PATH_MAX] = {0};
+	zht_lookup(key, oldval);
 
 	strcpy(newval, oldval);
 	strcat(newval, val);
 	strcat(newval, " ");
-
-//	/*DFZ debug*/
-//	log_msg("DFZ debug: zht_append() - key = %s, newval = %s. \n\n", key, newval);
 
 	zht_update(key, newval);
 
@@ -130,10 +122,8 @@ int zht_delete(const char *key, const char *val)
 	char newval[PATH_MAX] = {0};
 	char search[PATH_MAX] = {0};
 
-//	char oldval[PATH_MAX] = {0};
-//	zht_lookup(key, oldval);
-	char *oldval = NULL;
-	c_zht_lookup2(key, &oldval);
+	char oldval[PATH_MAX] = {0};
+	zht_lookup(key, oldval);
 
 	strcpy(search, " ");
 	strcat(search, val);
@@ -206,8 +196,8 @@ int fusion_getattr(const char *path, struct stat *statbuf)
 	log_msg("\nfusion_getattr(path=\"%s\", statbuf=0x%08x)\n", path, statbuf);
 	fusion_fullpath(fpath, path);
 
-	char *res = NULL;
-	int status = c_zht_lookup2(path, &res);
+	char res[PATH_MAX] = {0};
+	int status = zht_lookup(path, res);
 
 	if (ZHT_LOOKUP_FAIL == status) { /* if not found in ZHT */
 		log_msg("\n ===========DFZ debug: _getattr() %s does not exist \n\n", path);
@@ -216,11 +206,11 @@ int fusion_getattr(const char *path, struct stat *statbuf)
 		char dirname[PATH_MAX] = {0};
 		strcpy(dirname, path);
 		strcat(dirname, "/");
-		char *res = NULL;
 
 		log_msg("\n ===========DFZ debug: _getattr() dirname = %s. \n\n", dirname);
 
-		int stat = c_zht_lookup2(dirname, &res);
+		char res[PATH_MAX] = {0};
+		int stat = zht_lookup(dirname, res);
 
 		if (ZHT_LOOKUP_FAIL != stat) {
 			log_msg("\n ===========DFZ debug: _getattr() res = %s. \n\n", res);
@@ -383,8 +373,10 @@ int fusion_rmdir(const char *path)
 	char dirname[PATH_MAX] = {0};
 	strcpy(dirname, path);
 	strcat(dirname, "/");
-	char *val = NULL;
-	int stat = c_zht_lookup2(dirname, &val);
+
+	char val[PATH_MAX] = {0};
+	int stat = zht_lookup(dirname, val);
+
 	if (ZHT_LOOKUP_FAIL != stat
 			&& !strcmp(" ", val)) {
 		char rmcmd[PATH_MAX] = {0};
@@ -441,9 +433,9 @@ int fusion_unlink(const char *path)
 	strcpy(fname, pch + 1);
 	zht_delete(dirname, fname);
 
-	/*remove the file entry from ZHT */
-	char *oldaddr = NULL;
-	c_zht_lookup2(path, &oldaddr);
+	/*remove the file entry from ZHT*/
+	char oldaddr[PATH_MAX] = {0};
+	zht_lookup(path, oldaddr);
 	zht_remove(path);
 
 	/*if it's a local operation, we are done here*/
@@ -796,16 +788,18 @@ int fusion_release(const char *path, struct fuse_file_info *fi)
 	/*if this is just a local IO, we are all set*/
 	char myip[PATH_MAX] = {0};
 	net_getmyip(myip);
-	char *nodeaddr = NULL;
-	c_zht_lookup2(path, &nodeaddr);
+
+	char nodeaddr[PATH_MAX] = {0};
+	zht_lookup(path, nodeaddr);
+
 	if (!strcmp(myip, nodeaddr)) {
 		return retstat;
 	}
 
 	/*dealing with the remote copy*/
 	if (iswritten) { /*so it's a write mode*/
-		char *oldip = NULL;
-		c_zht_lookup2(path, &oldip);
+		char oldip[PATH_MAX] = {0};
+		zht_lookup(path, oldip);
 
 		/*update this file's node value in ZHT*/
 		char myip[PATH_MAX] = {0};
@@ -949,8 +943,9 @@ int fusion_opendir(const char *path, struct fuse_file_info *fi)
 	fusion_fullpath(fpath, path);
 
 	/*if path exists in ZHT, create it locally*/
-	char *res = NULL;
-	int stat = c_zht_lookup2(path, &res);
+	char res[PATH_MAX] = {0};
+	int stat = zht_lookup(path, res);
+
 	if (ZHT_LOOKUP_FAIL != stat) {
 		mkdir(fpath, 0775);
 	}
@@ -1011,8 +1006,8 @@ int fusion_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 
 //	char filelist[PATH_MAX] = {0};
 //	int stat = zht_lookup(dirname, filelist);
-	char *filelist = NULL;
-	int stat = c_zht_lookup2(dirname, &filelist);
+	char filelist[PATH_MAX] = {0};
+	int stat = zht_lookup(dirname, filelist);
 
 	if (ZHT_LOOKUP_FAIL == stat)
 		log_msg("\n ===========DFZ debug: fusion_readdir() filelist not found in ZHT \n\n");
@@ -1222,8 +1217,8 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 	char *pch = strrchr(path, '/');
 	strncpy(dirname, path, pch - path + 1);
 	log_msg("\n================DFZ debug: dirname = %s \n", dirname);
-	char *oldval = NULL;
-	int stat = c_zht_lookup2(dirname, &oldval);
+	char oldval[PATH_MAX] = {0};
+	int stat = zht_lookup(dirname, oldval);
 
 	if (ZHT_LOOKUP_FAIL == stat) {
 		log_msg("\n================DFZ ERROR: no parent path exists. \n");

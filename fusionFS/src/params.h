@@ -10,7 +10,7 @@
 #define FUSE_USE_VERSION 28
 
 /* DFZ FusionFS Constants */
-#define ZHT_LOOKUP_FAIL 5
+#define ZHT_LOOKUP_FAIL -2
 
 // need this to get pwrite().  I have to use setvbuf() instead of
 // setlinebuf() later in consequence.
