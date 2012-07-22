@@ -385,7 +385,7 @@ int fusion_rmdir(const char *path)
 		system(rmcmd);
 	}
 	else {
-		fusion_error("fusion_rmdir() directory not empty");
+		fusion_error("fusion_rmdir() directory not empty or not a directory");
 		return -1;
 	}
 //	retstat = rmdir(fpath);
@@ -425,6 +425,15 @@ int fusion_unlink(const char *path)
 
 	log_msg("fusion_unlink(path=\"%s\")\n", path);
 	fusion_fullpath(fpath, path);
+
+	/*if this file doesn't exist*/
+	char val[PATH_MAX] = {0};
+	int stat = zht_lookup(path, val);
+	if (ZHT_LOOKUP_FAIL == stat) {
+		fusion_error("_unlink() trying to remove a nonexistent file");
+		return -1;
+	}
+
 
 	/*remove the file from its parent dir in ZHT*/
 	char dirname[PATH_MAX] = {0}, fname[PATH_MAX] = {0};
