@@ -1013,8 +1013,6 @@ int fusion_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		strcat(dirname, "/");
 	}
 
-//	char filelist[PATH_MAX] = {0};
-//	int stat = zht_lookup(dirname, filelist);
 	char filelist[PATH_MAX] = {0};
 	int stat = zht_lookup(dirname, filelist);
 
@@ -1024,11 +1022,13 @@ int fusion_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		log_msg("\n ===========DFZ debug: fusion_readdir() filelist = %s. \n\n", filelist);
 
 	/*If <path/> has no files, clean up the local physical path*/
-	char rmallcmd[PATH_MAX] = {0};
-	strcpy(rmallcmd, "rm -r ");
-	strcat(rmallcmd, fpath);
-	strcat(rmallcmd, "*");
-	system(rmallcmd);
+	if (!strcmp(" ", filelist)) {
+		char rmallcmd[PATH_MAX] = {0};
+		strcpy(rmallcmd, "rm -r ");
+		strcat(rmallcmd, fpath);
+		strcat(rmallcmd, "*");
+		system(rmallcmd);
+	}
 
 	char *pch = strtok((char*)filelist, " ");
 	while (pch) {

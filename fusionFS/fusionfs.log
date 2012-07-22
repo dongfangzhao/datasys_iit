@@ -1,16 +1,30 @@
 
 fusion_init()
 
-fusion_getattr(path="/dir1", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
+fusion_statfs(path="/", statv=0xfe2b3ce0)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
+    f_bsize = 4096
+    f_frsize = 4096
+    f_blocks = 226076702
+    f_bfree = 171595653
+    f_bavail = 160280453
+    f_files = 56582144
+    f_ffree = 56531041
+    f_favail = 56531041
+    f_fsid = -3664705508722317990
+    f_flag = 0x00001000
+    f_namemax = 255
 
- ===========DFZ debug: _getattr() /dir1 does not exist 
+fusion_getattr(path="/dir", statbuf=0xfead6d30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir", fpath = "/home/dongfang/fusionFS/fusion_root/dir"
+
+ ===========DFZ debug: _getattr() /dir does not exist 
 
 
- ===========DFZ debug: _getattr() dirname = /dir1/. 
+ ===========DFZ debug: _getattr() dirname = /dir/. 
 
 
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/ created 
+ ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir/ created 
 
     ERROR fusion_getattr lstat: No such file or directory
     st_dev = 0
@@ -27,10 +41,10 @@ fusion_getattr(path="/dir1", statbuf=0x13ffed30)
     st_mtime = 0x00000000
     st_ctime = 0x00000000
 
-fusion_mkdir(path="/dir1", mode=0775)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
+fusion_mkdir(path="/dir", mode=0775)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir", fpath = "/home/dongfang/fusionFS/fusion_root/dir"
 
-==========DFZ debug: fusion_mkdir() parentpath = /, curpath = dir1/.
+==========DFZ debug: fusion_mkdir() parentpath = /, curpath = dir/.
 
 DFZ debug: zht_update() - remove_res = 0. 
 
@@ -38,25 +52,25 @@ DFZ debug: zht_update() - insert_res = 0.
 
 DFZ debug: zht_update() - status = 0. 
 
-DFZ debug: zht_update() - key = /, newval =  dir1/ . 
+DFZ debug: zht_update() - key = /, newval =  dir/ . 
 
 
-fusion_getattr(path="/dir1", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
+fusion_getattr(path="/dir", statbuf=0xfe2b3d30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir", fpath = "/home/dongfang/fusionFS/fusion_root/dir"
 
- ===========DFZ debug: _getattr() /dir1 does not exist 
+ ===========DFZ debug: _getattr() /dir does not exist 
 
 
- ===========DFZ debug: _getattr() dirname = /dir1/. 
+ ===========DFZ debug: _getattr() dirname = /dir/. 
 
 
  ===========DFZ debug: _getattr() res =  . 
 
 
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/ created 
+ ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir/ created 
 
     st_dev = 64775
-    st_ino = 38667551
+    st_ino = 38667982
     st_mode = 040775
     st_nlink = 2
     st_uid = 1000
@@ -65,26 +79,26 @@ fusion_getattr(path="/dir1", statbuf=0x18dcbd30)
     st_size = 4096
     st_blksize = 4096
     st_blocks = 8
-    st_atime = 0x500ae3e1
-    st_mtime = 0x500ae3e1
-    st_ctime = 0x500ae3e1
+    st_atime = 0x500b61b2
+    st_mtime = 0x500b61b2
+    st_ctime = 0x500b61b2
 
-fusion_getattr(path="/dir1", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
+fusion_getattr(path="/dir", statbuf=0xfead6d30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir", fpath = "/home/dongfang/fusionFS/fusion_root/dir"
 
- ===========DFZ debug: _getattr() /dir1 does not exist 
+ ===========DFZ debug: _getattr() /dir does not exist 
 
 
- ===========DFZ debug: _getattr() dirname = /dir1/. 
+ ===========DFZ debug: _getattr() dirname = /dir/. 
 
 
  ===========DFZ debug: _getattr() res =  . 
 
 
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/ created 
+ ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir/ created 
 
     st_dev = 64775
-    st_ino = 38667551
+    st_ino = 38667982
     st_mode = 040775
     st_nlink = 2
     st_uid = 1000
@@ -93,20 +107,20 @@ fusion_getattr(path="/dir1", statbuf=0x13ffed30)
     st_size = 4096
     st_blksize = 4096
     st_blocks = 8
-    st_atime = 0x500ae3e1
-    st_mtime = 0x500ae3e1
-    st_ctime = 0x500ae3e1
+    st_atime = 0x500b61b2
+    st_mtime = 0x500b61b2
+    st_ctime = 0x500b61b2
 
-fusion_getattr(path="/dir1/dir2", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2"
+fusion_getattr(path="/dir/file", statbuf=0xfe2b3d30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
 
- ===========DFZ debug: _getattr() /dir1/dir2 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/dir2/. 
+ ===========DFZ debug: _getattr() /dir/file does not exist 
 
 
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/dir2/ created 
+ ===========DFZ debug: _getattr() dirname = /dir/file/. 
+
+
+ ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir/file/ created 
 
     ERROR fusion_getattr lstat: No such file or directory
     st_dev = 0
@@ -123,132 +137,8 @@ fusion_getattr(path="/dir1/dir2", statbuf=0x18dcbd30)
     st_mtime = 0x00000000
     st_ctime = 0x00000000
 
-fusion_mkdir(path="/dir1/dir2", mode=0775)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2"
-
-==========DFZ debug: fusion_mkdir() parentpath = /dir1/, curpath = dir2/.
-
-DFZ debug: zht_update() - remove_res = 0. 
-
-DFZ debug: zht_update() - insert_res = 0. 
-
-DFZ debug: zht_update() - status = 0. 
-
-DFZ debug: zht_update() - key = /dir1/, newval =  dir2/ . 
-
-
-fusion_getattr(path="/dir1/dir2", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2"
-
- ===========DFZ debug: _getattr() /dir1/dir2 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/dir2/. 
-
-
- ===========DFZ debug: _getattr() res =  . 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/dir2/ created 
-
-    st_dev = 64775
-    st_ino = 38667587
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae3e4
-    st_mtime = 0x500ae3e4
-    st_ctime = 0x500ae3e4
-
-fusion_getattr(path="/dir1", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
-
- ===========DFZ debug: _getattr() /dir1 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/. 
-
-
- ===========DFZ debug: _getattr() res =  dir2/ . 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/ created 
-
-    st_dev = 64775
-    st_ino = 38667551
-    st_mode = 040775
-    st_nlink = 3
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae3e1
-    st_mtime = 0x500ae3e4
-    st_ctime = 0x500ae3e4
-
-fusion_getattr(path="/dir1/dir2", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2"
-
- ===========DFZ debug: _getattr() /dir1/dir2 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/dir2/. 
-
-
- ===========DFZ debug: _getattr() res =  . 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/dir2/ created 
-
-    st_dev = 64775
-    st_ino = 38667587
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae3e4
-    st_mtime = 0x500ae3e4
-    st_ctime = 0x500ae3e4
-
-fusion_getattr(path="/dir1/dir2/file1", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
-
- ===========DFZ debug: _getattr() /dir1/dir2/file1 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/dir2/file1/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/dir2/file1/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_create(path="/dir1/dir2/file1", mode=0100664, fi=0x13ffee30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
+fusion_create(path="/dir/file", mode=0100664, fi=0xfead6e30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
     flags = 0x00008841
     fh_old = 0x00000000
     writepage = 0
@@ -257,7 +147,7 @@ fusion_create(path="/dir1/dir2/file1", mode=0100664, fi=0x13ffee30)
     fh = 0x0000000000000008
     lock_owner = 0x0000000000000000
 
-================DFZ debug: dirname = /dir1/dir2/ 
+================DFZ debug: dirname = /dir/ 
 
 ================DFZ debug: oldval =   
 DFZ debug: zht_update() - remove_res = 0. 
@@ -266,12 +156,12 @@ DFZ debug: zht_update() - insert_res = 0.
 
 DFZ debug: zht_update() - status = 0. 
 
-DFZ debug: zht_update() - key = /dir1/dir2/, newval =  file1 . 
+DFZ debug: zht_update() - key = /dir/, newval =  file . 
 
 
 ================DFZ debug _create(): addr = 216.47.152.122 
 
-fusion_fgetattr(path="/dir1/dir2/file1", statbuf=0x13ffecf0, fi=0x13ffee30)
+fusion_fgetattr(path="/dir/file", statbuf=0xfead6cf0, fi=0xfead6e30)
     flags = 0x00008841
     fh_old = 0x00000000
     writepage = 0
@@ -280,7 +170,7 @@ fusion_fgetattr(path="/dir1/dir2/file1", statbuf=0x13ffecf0, fi=0x13ffee30)
     fh = 0x0000000000000008
     lock_owner = 0x0000000000000000
     st_dev = 64775
-    st_ino = 38667589
+    st_ino = 38667983
     st_mode = 0100664
     st_nlink = 1
     st_uid = 1000
@@ -289,32 +179,32 @@ fusion_fgetattr(path="/dir1/dir2/file1", statbuf=0x13ffecf0, fi=0x13ffee30)
     st_size = 0
     st_blksize = 4096
     st_blocks = 0
-    st_atime = 0x500ae3f9
-    st_mtime = 0x500ae3f9
-    st_ctime = 0x500ae3f9
+    st_atime = 0x500b61b8
+    st_mtime = 0x500b61b8
+    st_ctime = 0x500b61b8
 
-fusion_flush(path="/dir1/dir2/file1", fi=0x18dcbe30)
+fusion_flush(path="/dir/file", fi=0xfe2b3e30)
     flags = 0x00000000
     fh_old = 0x00000008
     writepage = 0
     direct_io = 0
     keep_cache = 0
     fh = 0x0000000000000008
-    lock_owner = 0xc33d3e7ed07aaf91
+    lock_owner = 0x14c0d05c7c42557e
 
-fusion_utime(path="/dir1/dir2/file1", ubuf=0x13ffec10)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
+fusion_utime(path="/dir/file", ubuf=0xfead6c10)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
 
-fusion_getattr(path="/dir1/dir2/file1", statbuf=0x13ffec50)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
+fusion_getattr(path="/dir/file", statbuf=0xfead6c50)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
 
  ===========DFZ debug: _getattr() zht_lookup() = 216.47.152.122. 
 
 
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/dir1/dir2/file1 exists in local. 
+ ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/dir/file exists in local. 
 
     st_dev = 64775
-    st_ino = 38667589
+    st_ino = 38667983
     st_mode = 0100664
     st_nlink = 1
     st_uid = 1000
@@ -323,21 +213,21 @@ fusion_getattr(path="/dir1/dir2/file1", statbuf=0x13ffec50)
     st_size = 0
     st_blksize = 4096
     st_blocks = 0
-    st_atime = 0x500ae3f9
-    st_mtime = 0x500ae3f9
-    st_ctime = 0x500ae3f9
+    st_atime = 0x500b61b8
+    st_mtime = 0x500b61b8
+    st_ctime = 0x500b61b8
 
-fusion_flush(path="/dir1/dir2/file1", fi=0x18dcbe30)
+fusion_flush(path="/dir/file", fi=0xfe2b3e30)
     flags = 0x00000000
     fh_old = 0x00000008
     writepage = 0
     direct_io = 0
     keep_cache = 0
     fh = 0x0000000000000008
-    lock_owner = 0xc33d3e7ed07aaf91
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
+    lock_owner = 0x14c0d05c7c42557e
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
 
-fusion_release(path="/dir1/dir2/file1", fi=0x13ffee30)
+fusion_release(path="/dir/file", fi=0xfead6e30)
     flags = 0x00008801
     fh_old = 0x00000008
     writepage = 0
@@ -346,50 +236,22 @@ fusion_release(path="/dir1/dir2/file1", fi=0x13ffee30)
     fh = 0x0000000000000008
     lock_owner = 0x0000000000000000
 
-fusion_getattr(path="/dir1", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
+fusion_getattr(path="/dir", statbuf=0xfe2b3d30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir", fpath = "/home/dongfang/fusionFS/fusion_root/dir"
 
- ===========DFZ debug: _getattr() /dir1 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/. 
+ ===========DFZ debug: _getattr() /dir does not exist 
 
 
- ===========DFZ debug: _getattr() res =  dir2/ . 
+ ===========DFZ debug: _getattr() dirname = /dir/. 
 
 
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/ created 
-
-    st_dev = 64775
-    st_ino = 38667551
-    st_mode = 040775
-    st_nlink = 3
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae3e1
-    st_mtime = 0x500ae3e4
-    st_ctime = 0x500ae3e4
-
-fusion_getattr(path="/dir1/dir2", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2"
-
- ===========DFZ debug: _getattr() /dir1/dir2 does not exist 
+ ===========DFZ debug: _getattr() res =  file . 
 
 
- ===========DFZ debug: _getattr() dirname = /dir1/dir2/. 
-
-
- ===========DFZ debug: _getattr() res =  file1 . 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/dir2/ created 
+ ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir/ created 
 
     st_dev = 64775
-    st_ino = 38667587
+    st_ino = 38667982
     st_mode = 040775
     st_nlink = 2
     st_uid = 1000
@@ -398,34 +260,34 @@ fusion_getattr(path="/dir1/dir2", statbuf=0x13ffed30)
     st_size = 4096
     st_blksize = 4096
     st_blocks = 8
-    st_atime = 0x500ae3e4
-    st_mtime = 0x500ae40e
-    st_ctime = 0x500ae40e
+    st_atime = 0x500b61b2
+    st_mtime = 0x500b61d4
+    st_ctime = 0x500b61d4
 
-fusion_getattr(path="/dir1/dir2/file1", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
+fusion_getattr(path="/dir/file", statbuf=0xfead6d30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
 
  ===========DFZ debug: _getattr() zht_lookup() = 216.47.142.168. 
 
 
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/dir1/dir2/file1 transferred from 216.47.142.168. 
+ ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/dir/file transferred from 216.47.142.168. 
 
     st_dev = 64775
-    st_ino = 38667589
+    st_ino = 38667983
     st_mode = 0100664
     st_nlink = 1
     st_uid = 1000
     st_gid = 1000
     st_rdev = 0
-    st_size = 22
+    st_size = 7
     st_blksize = 4096
     st_blocks = 8
-    st_atime = 0x500ae417
-    st_mtime = 0x500ae417
-    st_ctime = 0x500ae417
+    st_atime = 0x500b61dd
+    st_mtime = 0x500b61dd
+    st_ctime = 0x500b61dd
 
-fusion_open(path"/dir1/dir2/file1", fi=0x13ffee30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
+fusion_open(path"/dir/file", fi=0xfe2b3e30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
     flags = 0x00008000
     fh_old = 0x00000000
     writepage = 0
@@ -434,7 +296,7 @@ fusion_open(path"/dir1/dir2/file1", fi=0x13ffee30)
     fh = 0x0000000000000008
     lock_owner = 0x0000000000000000
 
-fusion_read(path="/dir1/dir2/file1", buf=0x140011a0, size=4096, offset=0, fi=0x18dcbe30)
+fusion_read(path="/dir/file", buf=0xf8001140, size=4096, offset=0, fi=0xfead6e30)
     flags = 0x00008000
     fh_old = 0x00000008
     writepage = 0
@@ -443,7 +305,7 @@ fusion_read(path="/dir1/dir2/file1", buf=0x140011a0, size=4096, offset=0, fi=0x1
     fh = 0x0000000000000008
     lock_owner = 0x0000000000000000
 
-fusion_fgetattr(path="/dir1/dir2/file1", statbuf=0x13ffed00, fi=0x13ffee30)
+fusion_fgetattr(path="/dir/file", statbuf=0xfe2b3d00, fi=0xfe2b3e30)
     flags = 0x00000000
     fh_old = 0x00000008
     writepage = 0
@@ -452,30 +314,30 @@ fusion_fgetattr(path="/dir1/dir2/file1", statbuf=0x13ffed00, fi=0x13ffee30)
     fh = 0x0000000000000008
     lock_owner = 0x0000000000000000
     st_dev = 64775
-    st_ino = 38667589
+    st_ino = 38667983
     st_mode = 0100664
     st_nlink = 1
     st_uid = 1000
     st_gid = 1000
     st_rdev = 0
-    st_size = 22
+    st_size = 7
     st_blksize = 4096
     st_blocks = 8
-    st_atime = 0x500ae417
-    st_mtime = 0x500ae417
-    st_ctime = 0x500ae417
+    st_atime = 0x500b61dd
+    st_mtime = 0x500b61dd
+    st_ctime = 0x500b61dd
 
-fusion_flush(path="/dir1/dir2/file1", fi=0x18dcbe30)
+fusion_flush(path="/dir/file", fi=0xfead6e30)
     flags = 0x00000000
     fh_old = 0x00000008
     writepage = 0
     direct_io = 0
     keep_cache = 0
     fh = 0x0000000000000008
-    lock_owner = 0x4c6713409bf4c936
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
+    lock_owner = 0x1c81d98eba28eda2
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
 
-fusion_release(path="/dir1/dir2/file1", fi=0x13ffee30)
+fusion_release(path="/dir/file", fi=0xfe2b3e30)
     flags = 0x00008000
     fh_old = 0x00000008
     writepage = 0
@@ -484,53 +346,25 @@ fusion_release(path="/dir1/dir2/file1", fi=0x13ffee30)
     fh = 0x0000000000000008
     lock_owner = 0x0000000000000000
 
-=========DFZ debug _release(): /home/dongfang/fusionFS/fusion_root/dir1/dir2/file1 unlinked from local node. 
+=========DFZ debug _release(): /home/dongfang/fusionFS/fusion_root/dir/file unlinked from local node. 
 
 
-fusion_getattr(path="/dir1", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
+fusion_getattr(path="/dir", statbuf=0xfead6d30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir", fpath = "/home/dongfang/fusionFS/fusion_root/dir"
 
- ===========DFZ debug: _getattr() /dir1 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/. 
+ ===========DFZ debug: _getattr() /dir does not exist 
 
 
- ===========DFZ debug: _getattr() res =  dir2/ . 
+ ===========DFZ debug: _getattr() dirname = /dir/. 
 
 
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/ created 
-
-    st_dev = 64775
-    st_ino = 38667551
-    st_mode = 040775
-    st_nlink = 3
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae3e1
-    st_mtime = 0x500ae3e4
-    st_ctime = 0x500ae3e4
-
-fusion_getattr(path="/dir1/dir2", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2"
-
- ===========DFZ debug: _getattr() /dir1/dir2 does not exist 
+ ===========DFZ debug: _getattr() res =  file . 
 
 
- ===========DFZ debug: _getattr() dirname = /dir1/dir2/. 
-
-
- ===========DFZ debug: _getattr() res =  file1 . 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/dir2/ created 
+ ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir/ created 
 
     st_dev = 64775
-    st_ino = 38667587
+    st_ino = 38667982
     st_mode = 040775
     st_nlink = 2
     st_uid = 1000
@@ -539,34 +373,34 @@ fusion_getattr(path="/dir1/dir2", statbuf=0x13ffed30)
     st_size = 4096
     st_blksize = 4096
     st_blocks = 8
-    st_atime = 0x500ae3e4
-    st_mtime = 0x500ae417
-    st_ctime = 0x500ae417
+    st_atime = 0x500b61b2
+    st_mtime = 0x500b61dd
+    st_ctime = 0x500b61dd
 
-fusion_getattr(path="/dir1/dir2/file1", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
+fusion_getattr(path="/dir/file", statbuf=0xfe2b3d30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
 
  ===========DFZ debug: _getattr() zht_lookup() = 216.47.142.168. 
 
 
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/dir1/dir2/file1 transferred from 216.47.142.168. 
+ ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/dir/file transferred from 216.47.142.168. 
 
     st_dev = 64775
-    st_ino = 38667589
+    st_ino = 38667983
     st_mode = 0100664
     st_nlink = 1
     st_uid = 1000
     st_gid = 1000
     st_rdev = 0
-    st_size = 22
+    st_size = 7
     st_blksize = 4096
     st_blocks = 8
-    st_atime = 0x500ae41e
-    st_mtime = 0x500ae41e
-    st_ctime = 0x500ae41e
+    st_atime = 0x500b61e6
+    st_mtime = 0x500b61e6
+    st_ctime = 0x500b61e6
 
-fusion_open(path"/dir1/dir2/file1", fi=0x13ffee30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
+fusion_open(path"/dir/file", fi=0xfead6e30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
     flags = 0x00008401
     fh_old = 0x00000000
     writepage = 0
@@ -575,20 +409,20 @@ fusion_open(path"/dir1/dir2/file1", fi=0x13ffee30)
     fh = 0x0000000000000008
     lock_owner = 0x0000000000000000
 
-fusion_flush(path="/dir1/dir2/file1", fi=0x18dcbe30)
+fusion_flush(path="/dir/file", fi=0xfe2b3e30)
     flags = 0x00000000
     fh_old = 0x00000008
     writepage = 0
     direct_io = 0
     keep_cache = 0
     fh = 0x0000000000000008
-    lock_owner = 0x56898aa30a41b1ce
+    lock_owner = 0xb843275b3a690e13
 
-fusion_getxattr(path = "/dir1/dir2/file1", name = "security.capability", value = 0x00000000, size = 0)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
+fusion_getxattr(path = "/dir/file", name = "security.capability", value = 0x00000000, size = 0)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
     ERROR fusion_getxattr lgetxattr: No data available
 
-fusion_write(path="/dir1/dir2/file1", buf=0x18dcd060, size=29, offset=22, fi=0x18dcbe30)
+fusion_write(path="/dir/file", buf=0xfe2b5060, size=7, offset=7, fi=0xfe2b3e30)
     flags = 0x00008401
     fh_old = 0x00000008
     writepage = 0
@@ -597,17 +431,17 @@ fusion_write(path="/dir1/dir2/file1", buf=0x18dcd060, size=29, offset=22, fi=0x1
     fh = 0x0000000000000008
     lock_owner = 0x0000000000000000
 
-fusion_flush(path="/dir1/dir2/file1", fi=0x13ffee30)
+fusion_flush(path="/dir/file", fi=0xfead6e30)
     flags = 0x00000000
     fh_old = 0x00000008
     writepage = 0
     direct_io = 0
     keep_cache = 0
     fh = 0x0000000000000008
-    lock_owner = 0x56898aa30a41b1ce
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2/file1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2/file1"
+    lock_owner = 0xb843275b3a690e13
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir/file", fpath = "/home/dongfang/fusionFS/fusion_root/dir/file"
 
-fusion_release(path="/dir1/dir2/file1", fi=0x18dcbe30)
+fusion_release(path="/dir/file", fi=0xfe2b3e30)
     flags = 0x00008401
     fh_old = 0x00000008
     writepage = 0
@@ -621,59 +455,31 @@ DFZ debug: zht_update() - insert_res = 0.
 
 DFZ debug: zht_update() - status = 0. 
 
-DFZ debug: zht_update() - key = /dir1/dir2/file1, newval = 216.47.152.122. 
+DFZ debug: zht_update() - key = /dir/file, newval = 216.47.152.122. 
 
 
-=========DFZ debug _release(): /home/dongfang/fusionFS/fusion_root/dir1/dir2/file1 unlinked from 216.47.142.168. 
+=========DFZ debug _release(): /home/dongfang/fusionFS/fusion_root/dir/file unlinked from 216.47.142.168. 
 
 
-=========DFZ debug _release(): /home/dongfang/fusionFS/fusion_root/dir1/dir2/file1 unlinked from 216.47.142.168. 
+=========DFZ debug _release(): /home/dongfang/fusionFS/fusion_root/dir/file unlinked from 216.47.142.168. 
 
 
-fusion_getattr(path="/dir1", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
+fusion_getattr(path="/dir", statbuf=0xfead6d30)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir", fpath = "/home/dongfang/fusionFS/fusion_root/dir"
 
- ===========DFZ debug: _getattr() /dir1 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/. 
+ ===========DFZ debug: _getattr() /dir does not exist 
 
 
- ===========DFZ debug: _getattr() res =  dir2/ . 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/ created 
-
-    st_dev = 64775
-    st_ino = 38667551
-    st_mode = 040775
-    st_nlink = 3
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae3e1
-    st_mtime = 0x500ae3e4
-    st_ctime = 0x500ae3e4
-
-fusion_getattr(path="/dir1/dir2", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2"
-
- ===========DFZ debug: _getattr() /dir1/dir2 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/dir2/. 
+ ===========DFZ debug: _getattr() dirname = /dir/. 
 
 
  ===========DFZ debug: _getattr() res =  . 
 
 
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/dir2/ created 
+ ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir/ created 
 
     st_dev = 64775
-    st_ino = 38667587
+    st_ino = 38667982
     st_mode = 040775
     st_nlink = 2
     st_uid = 1000
@@ -682,224 +488,44 @@ fusion_getattr(path="/dir1/dir2", statbuf=0x18dcbd30)
     st_size = 4096
     st_blksize = 4096
     st_blocks = 8
-    st_atime = 0x500ae3e4
-    st_mtime = 0x500ae4af
-    st_ctime = 0x500ae4af
+    st_atime = 0x500b61b2
+    st_mtime = 0x500b6202
+    st_ctime = 0x500b6202
 
-fusion_opendir(path="/dir1/dir2", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2"
-    ERROR _opendir() failed: <fpath> not found in ZHT: File exists
+fusion_opendir(path="/dir", fi=0xfe2b3d70)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir", fpath = "/home/dongfang/fusionFS/fusion_root/dir"
+    ERROR _opendir() failed: <fpath> not found in ZHT: Success
     flags = 0x00098800
     fh_old = 0x00000000
     writepage = 0
     direct_io = 0
     keep_cache = 0
-    fh = 0x00007fb60c001130
+    fh = 0x00007fe5f0000d80
     lock_owner = 0x0000000000000000
 
-fusion_readdir(path="/dir1/dir2", buf=0x0c000990, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2"
+fusion_readdir(path="/dir", buf=0xf0000be0, filler=0x9b409460, offset=0, fi=0xfead6d70)
+    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir", fpath = "/home/dongfang/fusionFS/fusion_root/dir"
 
  ===========DFZ debug: fusion_readdir() filelist =  . 
 
     flags = 0x00000000
-    fh_old = 0x7fb60c001130
+    fh_old = 0x7fe5f0000d80
     writepage = 0
     direct_io = 0
     keep_cache = 0
-    fh = 0x00007fb60c001130
+    fh = 0x00007fe5f0000d80
     lock_owner = 0x0000000000000000
 
-fusion_releasedir(path="/dir1/dir2", fi=0x13ffed80)
+fusion_releasedir(path="/dir", fi=0xfe2b3d80)
     flags = 0x00000000
-    fh_old = 0x7fb60c001130
+    fh_old = 0x7fe5f0000d80
     writepage = 0
     direct_io = 0
     keep_cache = 0
-    fh = 0x00007fb60c001130
+    fh = 0x00007fe5f0000d80
     lock_owner = 0x0000000000000000
 
-fusion_getattr(path="/dir1", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
-
- ===========DFZ debug: _getattr() /dir1 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/. 
-
-
- ===========DFZ debug: _getattr() res =  dir2/ . 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/ created 
-
-    st_dev = 64775
-    st_ino = 38667551
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae4b8
-    st_mtime = 0x500ae4b8
-    st_ctime = 0x500ae4b8
-fusion_rmdir(path="/dir1")
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
-    ERROR fusion_rmdir() directory not empty: File exists
-
-fusion_statfs(path="/", statv=0x13ffece0)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    f_bsize = 4096
-    f_frsize = 4096
-    f_blocks = 226076702
-    f_bfree = 171592481
-    f_bavail = 160277281
-    f_files = 56582144
-    f_ffree = 56531282
-    f_favail = 56531282
-    f_fsid = -3664705508722317990
-    f_flag = 0x00001000
-    f_namemax = 255
-
-fusion_getattr(path="/dir1", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
-
- ===========DFZ debug: _getattr() /dir1 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/. 
-
-
- ===========DFZ debug: _getattr() res =  . 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/ created 
-
-    st_dev = 64775
-    st_ino = 38667551
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae4b8
-    st_mtime = 0x500ae4b8
-    st_ctime = 0x500ae4b8
-
-fusion_getattr(path="/dir1/dir2", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2"
-
- ===========DFZ debug: _getattr() /dir1/dir2 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/dir2/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/dir2/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_getattr(path="/dir1/dir2", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1/dir2", fpath = "/home/dongfang/fusionFS/fusion_root/dir1/dir2"
-
- ===========DFZ debug: _getattr() /dir1/dir2 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/dir2/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/dir2/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_statfs(path="/", statv=0x13ffece0)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    f_bsize = 4096
-    f_frsize = 4096
-    f_blocks = 226076702
-    f_bfree = 171592482
-    f_bavail = 160277282
-    f_files = 56582144
-    f_ffree = 56531282
-    f_favail = 56531282
-    f_fsid = -3664705508722317990
-    f_flag = 0x00001000
-    f_namemax = 255
-
-fusion_getattr(path="/dir1", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
-
- ===========DFZ debug: _getattr() /dir1 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /dir1/. 
-
-
- ===========DFZ debug: _getattr() res =  . 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/dir1/ created 
-
-    st_dev = 64775
-    st_ino = 38667551
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae4b8
-    st_mtime = 0x500ae4b8
-    st_ctime = 0x500ae4b8
-fusion_rmdir(path="/dir1")
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/dir1", fpath = "/home/dongfang/fusionFS/fusion_root/dir1"
-
-==========DFZ debug: fusion_rmdir() parentpath = /, curpath = dir1/ 
-
-DFZ debug: zht_update() - remove_res = 0. 
-
-DFZ debug: zht_update() - insert_res = 0. 
-
-DFZ debug: zht_update() - status = 0. 
-
-DFZ debug: zht_update() - key = /, newval =  . 
-
-
-fusion_getattr(path="/", statbuf=0x13ffed00)
+fusion_getattr(path="/", statbuf=0xfead6d00)
     fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
 
  ===========DFZ debug: _getattr() zht_lookup() =  . 
@@ -917,1210 +543,40 @@ fusion_getattr(path="/", statbuf=0x13ffed00)
     st_size = 4096
     st_blksize = 4096
     st_blocks = 8
-    st_atime = 0x500ae3c3
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
+    st_atime = 0x500b620a
+    st_mtime = 0x500b620a
+    st_ctime = 0x500b620a
 
-fusion_opendir(path="/", fi=0x18dcbd70)
+fusion_opendir(path="/", fi=0xfe2b3d70)
     fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
     flags = 0x00098800
     fh_old = 0x00000000
     writepage = 0
     direct_io = 0
     keep_cache = 0
-    fh = 0x00007fb6140011a0
+    fh = 0x00007fe5f0000d80
     lock_owner = 0x0000000000000000
 
-fusion_readdir(path="/", buf=0x14000f90, filler=0x9b409460, offset=0, fi=0x13ffed70)
+fusion_readdir(path="/", buf=0xf0000be0, filler=0x9b409460, offset=0, fi=0xfead6d70)
     fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
 
  ===========DFZ debug: fusion_readdir() filelist =  . 
 
     flags = 0x00000000
-    fh_old = 0x7fb6140011a0
+    fh_old = 0x7fe5f0000d80
     writepage = 0
     direct_io = 0
     keep_cache = 0
-    fh = 0x00007fb6140011a0
+    fh = 0x00007fe5f0000d80
     lock_owner = 0x0000000000000000
 
-fusion_releasedir(path="/", fi=0x18dcbd80)
+fusion_releasedir(path="/", fi=0xfe2b3d80)
     flags = 0x00000000
-    fh_old = 0x7fb6140011a0
+    fh_old = 0x7fe5f0000d80
     writepage = 0
     direct_io = 0
     keep_cache = 0
-    fh = 0x00007fb6140011a0
+    fh = 0x00007fe5f0000d80
     lock_owner = 0x0000000000000000
 
-fusion_getattr(path="/", statbuf=0x13ffed00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x18dcbd00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x13ffed00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/AACS", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/AACS", fpath = "/home/dongfang/fusionFS/fusion_root/AACS"
-
- ===========DFZ debug: _getattr() /AACS does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /AACS/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/AACS/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_getattr(path="/.xdg-volume-info", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/.xdg-volume-info", fpath = "/home/dongfang/fusionFS/fusion_root/.xdg-volume-info"
-
- ===========DFZ debug: _getattr() /.xdg-volume-info does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /.xdg-volume-info/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/.xdg-volume-info/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_getattr(path="/autorun.inf", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/autorun.inf", fpath = "/home/dongfang/fusionFS/fusion_root/autorun.inf"
-
- ===========DFZ debug: _getattr() /autorun.inf does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /autorun.inf/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/autorun.inf/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_getattr(path="/BDSVM", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/BDSVM", fpath = "/home/dongfang/fusionFS/fusion_root/BDSVM"
-
- ===========DFZ debug: _getattr() /BDSVM does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /BDSVM/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/BDSVM/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_getattr(path="/BDMV", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/BDMV", fpath = "/home/dongfang/fusionFS/fusion_root/BDMV"
-
- ===========DFZ debug: _getattr() /BDMV does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /BDMV/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/BDMV/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_getattr(path="/BDMV", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/BDMV", fpath = "/home/dongfang/fusionFS/fusion_root/BDMV"
-
- ===========DFZ debug: _getattr() /BDMV does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /BDMV/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/BDMV/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_opendir(path="/", fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb6140011a0
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x14000f90, filler=0x9b409460, offset=0, fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb6140011a0
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb6140011a0
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x18dcbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb6140011a0
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb6140011a0
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000b60, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000b60, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000990, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    lock_owner = 0x0000000000000000
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c0008c0, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000990, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000b60, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000990, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c0008c0, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    lock_owner = 0x0000000000000000
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000990, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000d40
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000990, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000d40
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000d40
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000d40
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000d40
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000d40
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c0008c0, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000d40
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000d40
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    fh_old = 0x7fb60c000d40
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000d40
-    lock_owner = 0x0000000000000000
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000cb0
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000c30, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000cb0
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000cb0
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000cb0
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000cb0
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000b60, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000990, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c0008c0, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000990, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000b60, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_opendir(path="/", fi=0x13ffed70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-    flags = 0x00098800
-    fh_old = 0x00000000
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_readdir(path="/", buf=0x0c000b60, filler=0x9b409460, offset=0, fi=0x18dcbd70)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: fusion_readdir() filelist =  . 
-
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_releasedir(path="/", fi=0x127fbd80)
-    flags = 0x00000000
-    fh_old = 0x7fb60c000c30
-    writepage = 0
-    direct_io = 0
-    keep_cache = 0
-    fh = 0x00007fb60c000c30
-    lock_owner = 0x0000000000000000
-
-fusion_getattr(path="/autorun.inf", statbuf=0x13ffed30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/autorun.inf", fpath = "/home/dongfang/fusionFS/fusion_root/autorun.inf"
-
- ===========DFZ debug: _getattr() /autorun.inf does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /autorun.inf/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/autorun.inf/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_getattr(path="/.Trash", statbuf=0x18dcbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/.Trash", fpath = "/home/dongfang/fusionFS/fusion_root/.Trash"
-
- ===========DFZ debug: _getattr() /.Trash does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /.Trash/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/.Trash/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_getattr(path="/.Trash-1000", statbuf=0x127fbd30)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/.Trash-1000", fpath = "/home/dongfang/fusionFS/fusion_root/.Trash-1000"
-
- ===========DFZ debug: _getattr() /.Trash-1000 does not exist 
-
-
- ===========DFZ debug: _getattr() dirname = /.Trash-1000/. 
-
-
- ===========DFZ debug: _getattr() new directory /home/dongfang/fusionFS/fusion_root/.Trash-1000/ created 
-
-    ERROR fusion_getattr lstat: No such file or directory
-    st_dev = 0
-    st_ino = 0
-    st_mode = 00
-    st_nlink = 0
-    st_uid = 0
-    st_gid = 0
-    st_rdev = 0
-    st_size = 0
-    st_blksize = 0
-    st_blocks = 0
-    st_atime = 0x00000000
-    st_mtime = 0x00000000
-    st_ctime = 0x00000000
-
-fusion_getattr(path="/", statbuf=0x13ffed00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x18dcbd00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x127fbd00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x13ffed00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x18dcbd00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x127fbd00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x13ffed00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x18dcbd00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x127fbd00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x13ffed00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x18dcbd00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
-
-fusion_getattr(path="/", statbuf=0x127fbd00)
-    fusion_fullpath:  rootdir = "/home/dongfang/fusionFS/fusion_root", path = "/", fpath = "/home/dongfang/fusionFS/fusion_root/"
-
- ===========DFZ debug: _getattr() zht_lookup() =  . 
-
-
- ===========DFZ debug: _getattr() /home/dongfang/fusionFS/fusion_root/ exists in local. 
-
-    st_dev = 64775
-    st_ino = 37880954
-    st_mode = 040775
-    st_nlink = 2
-    st_uid = 1000
-    st_gid = 1000
-    st_rdev = 0
-    st_size = 4096
-    st_blksize = 4096
-    st_blocks = 8
-    st_atime = 0x500ae558
-    st_mtime = 0x500ae53b
-    st_ctime = 0x500ae53b
+fusion_destroy(userdata=0x0153eee0)
