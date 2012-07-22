@@ -44,8 +44,7 @@
 /*
  * get the ip address of the local machine
  */
-int net_getmyip(char *addr)
-{
+int net_getmyip(char *addr) {
 //	char hostname[PATH_MAX] = {0};
 //	struct hostent *host = (struct hostent *) malloc(sizeof(struct hostent));
 //
@@ -55,25 +54,25 @@ int net_getmyip(char *addr)
 //	strcpy(addr, inet_ntoa(*((struct in_addr *)host->h_addr)));
 ////	printf("IP Address : %s\n", inet_ntoa(*((struct in_addr *)host->h_addr)));
 
-    struct ifaddrs * ifAddrStruct=NULL;
-    struct ifaddrs * ifa=NULL;
-    void * tmpAddrPtr=NULL;
+	struct ifaddrs * ifAddrStruct = NULL;
+	struct ifaddrs * ifa = NULL;
+	void * tmpAddrPtr = NULL;
 
-    getifaddrs(&ifAddrStruct);
+	getifaddrs(&ifAddrStruct);
 
-    for (ifa = ifAddrStruct; ifa != NULL; ifa = ifa->ifa_next) {
+	for (ifa = ifAddrStruct; ifa != NULL; ifa = ifa->ifa_next) {
 		/*skip the loopback*/
-    	if (!strcmp("lo", ifa->ifa_name))
+		if (!strcmp("lo", ifa->ifa_name))
 			continue;
 
-        if (ifa ->ifa_addr->sa_family==AF_INET) { // check it is IP4
-            // is a valid IP4 Address
-            tmpAddrPtr=&((struct sockaddr_in *)ifa->ifa_addr)->sin_addr;
-            char addressBuffer[INET_ADDRSTRLEN];
-            inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
+		if (ifa->ifa_addr->sa_family == AF_INET) { // check it is IP4
+			// is a valid IP4 Address
+			tmpAddrPtr = &((struct sockaddr_in *) ifa->ifa_addr)->sin_addr;
+			char addressBuffer[INET_ADDRSTRLEN];
+			inet_ntop(AF_INET, tmpAddrPtr, addressBuffer, INET_ADDRSTRLEN);
 //            printf("%s IP Address %s\n", ifa->ifa_name, addressBuffer);
-            strcpy(addr, addressBuffer);
-        }
+			strcpy(addr, addressBuffer);
+		}
 //        else if (ifa->ifa_addr->sa_family==AF_INET6) { // check it is IP6
 //            // is a valid IP6 Address
 //            tmpAddrPtr=&((struct sockaddr_in6 *)ifa->ifa_addr)->sin6_addr;
@@ -81,9 +80,9 @@ int net_getmyip(char *addr)
 //            inet_ntop(AF_INET6, tmpAddrPtr, addressBuffer, INET6_ADDRSTRLEN);
 //            printf("%s IP Address %s\n", ifa->ifa_name, addressBuffer);
 //        }
-    }
-    if (ifAddrStruct!=NULL)
-    	freeifaddrs(ifAddrStruct);
+	}
+	if (ifAddrStruct != NULL)
+		freeifaddrs(ifAddrStruct);
 
 	return 0;
 }

@@ -199,6 +199,9 @@ int fusion_getattr(const char *path, struct stat *statbuf)
 	char res[PATH_MAX] = {0};
 	int status = zht_lookup(path, res);
 
+	char myaddr[PATH_MAX] = {0};
+	net_getmyip(myaddr);
+
 	if (ZHT_LOOKUP_FAIL == status) { /* if not found in ZHT */
 		log_msg("\n ===========DFZ debug: _getattr() %s does not exist \n\n", path);
 
@@ -232,6 +235,13 @@ int fusion_getattr(const char *path, struct stat *statbuf)
 			ffs_recvfile_c("udt", res, "9000", fpath, fpath);
 
 			log_msg("\n ===========DFZ debug: _getattr() %s transferred from %s. \n\n",
+					fpath, res);
+		}
+		else if (strcmp("/", path) /*even it's in local node, it could be outdated.*/
+				&& strcmp(res, myaddr)) {
+			ffs_recvfile_c("udt", res, "9000", fpath, fpath);
+
+			log_msg("\n ===========DFZ debug: _getattr() %s transferred from %s because local copy might be outdated. \n\n",
 					fpath, res);
 		}
 		else {

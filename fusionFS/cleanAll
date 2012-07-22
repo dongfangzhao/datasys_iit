@@ -10,4 +10,7 @@ make clean
 cd ../udt
 make clean
 
+cd ../../
+rm fusionfs.log
+
 echo =========Clean succeed==========
