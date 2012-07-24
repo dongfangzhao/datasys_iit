@@ -30,8 +30,15 @@ int main(int argc, char **argv) {
 	const char *key = "hello";
 	const char *value = "zht";
 
+	const char *largeKey = "keyofLargeValue";
+	char largeVal[1024] = {0};
+	memset(largeVal, '1', 1023);
+
 	int iret = c_zht_insert2(key, value);
 	fprintf(stderr, "c_zht_insert, return code: %d\n", iret);
+
+	iret = c_zht_insert2(largeKey, largeVal);
+	fprintf(stderr, "c_zht_insert ---->DFZ: 1K_val test, return code: %d\n", iret);
 
 	size_t n;
 	char *result = (char*) calloc(LOOKUP_SIZE, sizeof(char));

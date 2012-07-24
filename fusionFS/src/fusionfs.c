@@ -82,7 +82,7 @@ int zht_update(const char *key, const char *val)
 	int insert_res = zht_insert(key, val);
 	log_msg("DFZ debug: zht_update() - insert_res = %d. \n\n", insert_res);
 
-	char newval[PATH_MAX] = {0};
+	char newval[ZHT_MAX_BUFF] = {0};
 	int status = zht_lookup(key, newval);
 
 	log_msg("DFZ debug: zht_update() - status = %d. \n\n", status);
@@ -100,9 +100,9 @@ int zht_update(const char *key, const char *val)
  */
 int zht_append(const char *key, const char *val)
 {
-	char newval[PATH_MAX] = {0};
+	char newval[ZHT_MAX_BUFF] = {0};
 
-	char oldval[PATH_MAX] = {0};
+	char oldval[ZHT_MAX_BUFF] = {0};
 	zht_lookup(key, oldval);
 
 	strcpy(newval, oldval);
@@ -119,10 +119,10 @@ int zht_append(const char *key, const char *val)
  */
 int zht_delete(const char *key, const char *val)
 {
-	char newval[PATH_MAX] = {0};
+	char newval[ZHT_MAX_BUFF] = {0};
 	char search[PATH_MAX] = {0};
 
-	char oldval[PATH_MAX] = {0};
+	char oldval[ZHT_MAX_BUFF] = {0};
 	zht_lookup(key, oldval);
 
 	strcpy(search, " ");
@@ -196,7 +196,7 @@ int fusion_getattr(const char *path, struct stat *statbuf)
 	log_msg("\nfusion_getattr(path=\"%s\", statbuf=0x%08x)\n", path, statbuf);
 	fusion_fullpath(fpath, path);
 
-	char res[PATH_MAX] = {0};
+	char res[ZHT_MAX_BUFF] = {0};
 	int status = zht_lookup(path, res);
 
 	char myaddr[PATH_MAX] = {0};
@@ -212,7 +212,7 @@ int fusion_getattr(const char *path, struct stat *statbuf)
 
 		log_msg("\n ===========DFZ debug: _getattr() dirname = %s. \n\n", dirname);
 
-		char res[PATH_MAX] = {0};
+		char res[ZHT_MAX_BUFF] = {0};
 		int stat = zht_lookup(dirname, res);
 
 		if (ZHT_LOOKUP_FAIL != stat) {
@@ -384,7 +384,7 @@ int fusion_rmdir(const char *path)
 	strcpy(dirname, path);
 	strcat(dirname, "/");
 
-	char val[PATH_MAX] = {0};
+	char val[ZHT_MAX_BUFF] = {0};
 	int stat = zht_lookup(dirname, val);
 
 	if (ZHT_LOOKUP_FAIL != stat
@@ -437,7 +437,7 @@ int fusion_unlink(const char *path)
 	fusion_fullpath(fpath, path);
 
 	/*if this file doesn't exist*/
-	char val[PATH_MAX] = {0};
+	char val[ZHT_MAX_BUFF] = {0};
 	int stat = zht_lookup(path, val);
 	if (ZHT_LOOKUP_FAIL == stat) {
 		fusion_error("_unlink() trying to remove a nonexistent file");
@@ -962,7 +962,7 @@ int fusion_opendir(const char *path, struct fuse_file_info *fi)
 	fusion_fullpath(fpath, path);
 
 	/*if path exists in ZHT, create it locally*/
-	char res[PATH_MAX] = {0};
+	char res[ZHT_MAX_BUFF] = {0};
 	int stat = zht_lookup(path, res);
 
 	if (ZHT_LOOKUP_FAIL != stat) {
@@ -1023,7 +1023,7 @@ int fusion_readdir(const char *path, void *buf, fuse_fill_dir_t filler,
 		strcat(dirname, "/");
 	}
 
-	char filelist[PATH_MAX] = {0};
+	char filelist[ZHT_MAX_BUFF] = {0};
 	int stat = zht_lookup(dirname, filelist);
 
 	if (ZHT_LOOKUP_FAIL == stat)
@@ -1224,6 +1224,8 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 	log_msg("\nfusion_create(path=\"%s\", mode=0%03o, fi=0x%08x)\n", path, mode, fi);
 	fusion_fullpath(fpath, path);
 
+	/*TODO: if <path> exists in ZHT, we should return at this point*/
+
 	/*create the local file*/
 	fd = creat(fpath, mode);
 	if (fd < 0)
@@ -1236,7 +1238,7 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 	char *pch = strrchr(path, '/');
 	strncpy(dirname, path, pch - path + 1);
 	log_msg("\n================DFZ debug: dirname = %s \n", dirname);
-	char oldval[PATH_MAX] = {0};
+	char oldval[ZHT_MAX_BUFF] = {0};
 	int stat = zht_lookup(dirname, oldval);
 
 	if (ZHT_LOOKUP_FAIL == stat) {

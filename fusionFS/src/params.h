@@ -30,6 +30,7 @@ struct fusion_state {
  */
 #include <search.h> /* hash table, linked list */
 #define MAX_HT_ENTRY 1024
+#define ZHT_MAX_BUFF 1<<16 /*ZHT only supports up to 64KB per msg*/
 ENTRY e, *ep; /* Global hash table entry */
 
 #endif
