@@ -223,9 +223,10 @@ int fusion_getattr(const char *path, struct stat *statbuf)
 			strcpy(cmd_mkdir, "mkdir -p ");
 			strcat(cmd_mkdir, fpath);
 			system(cmd_mkdir);
+
+			log_msg("\n ===========DFZ debug: _getattr() new directory %s/ created \n\n", fpath);
 		}
 
-		log_msg("\n ===========DFZ debug: _getattr() new directory %s/ created \n\n", fpath);
 	}
 	else { /* if file exists in ZHT */
 		log_msg("\n ===========DFZ debug: _getattr() zht_lookup() = %s. \n\n", res);
@@ -818,7 +819,12 @@ int fusion_release(const char *path, struct fuse_file_info *fi)
 	/*dealing with the remote copy*/
 	if (iswritten) { /*so it's a write mode*/
 		char oldip[PATH_MAX] = {0};
-		zht_lookup(path, oldip);
+		int stat = zht_lookup(path, oldip);
+		/*if path doesn't exist in ZHT, try to remove it locally */
+		if (ZHT_LOOKUP_FAIL == stat) {
+			unlink(fpath);
+			return 0;
+		}
 
 		/*update this file's node value in ZHT*/
 		char myip[PATH_MAX] = {0};
@@ -1224,7 +1230,13 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 	log_msg("\nfusion_create(path=\"%s\", mode=0%03o, fi=0x%08x)\n", path, mode, fi);
 	fusion_fullpath(fpath, path);
 
-	/*TODO: if <path> exists in ZHT, we should return at this point*/
+	/*if <path> exists in ZHT, we should return at this point*/
+	char res[ZHT_MAX_BUFF] = {0};
+	int stat = zht_lookup(path, res);
+	if (ZHT_LOOKUP_FAIL != stat) {
+		log_msg("\n================DFZ ERROR: file already exists. \n");
+		return -1;
+	}
 
 	/*create the local file*/
 	fd = creat(fpath, mode);
@@ -1239,11 +1251,11 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 	strncpy(dirname, path, pch - path + 1);
 	log_msg("\n================DFZ debug: dirname = %s \n", dirname);
 	char oldval[ZHT_MAX_BUFF] = {0};
-	int stat = zht_lookup(dirname, oldval);
+	stat = zht_lookup(dirname, oldval);
 
 	if (ZHT_LOOKUP_FAIL == stat) {
 		log_msg("\n================DFZ ERROR: no parent path exists. \n");
-		return retstat;
+		return -1;
 	}
 	log_msg("\n================DFZ debug: oldval = %s \n", oldval);
 	zht_append(dirname, pch + 1);
