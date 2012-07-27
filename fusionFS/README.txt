@@ -48,13 +48,20 @@ How to test fusionfs with IOR:
 			hec-01
 			hec-02
 			...
-		4.2) On any node, run `fusion_mouint/mpiexec -hostfile YOUR_HOSTFILE IOR -F`
-	NOTE: In IOR, when it claims it "reads" a file, it indeed opens the file with mode 02.
-		Mode 02 means read AND write. This indicates that normal write-read lock cannot 
-		suffice IOR, i.e. it requires write-write lock for read after write.
+		4.2) On any node, run `fusion_mount/mpiexec -hostfile YOUR_HOSTFILE IOR -F`. This is
+			to test the aggregate bandwidth with all local read/write for each process.
+		4.3) Run `fusion_mount/mpiexec -hostfile YOUR_HOSTFILE IOR -F -C -k`. This is to test
+			local write and remote read in a round-robin fashion for the aggregate bandwidth.
+			That is, file_i is written on node_i and then will be read by node_(i+1). See
+			option -C from the IOR User Manual for more information. '-k' is required here, 
+			or you will encounter node_i and node_i+1 are trying to remove the same file 
+			concurrently, which is a write-write conflict that FusionFS doesn't support for now.
+	IMPORTANT NOTE: In IOR, when it claims it "reads" a file, it indeed opens the file with	mode 02. 
+		Mode 02 means read AND write. Therefore, write-write locks are expected even if you
+		only conduct read-only experiments with IOR.
 
 Update history:
-	07/26/2012: add metadata benchmark; tested IOR on 10 nodes
+	07/26/2012: add metadata benchmark; tested IOR on 10 nodes with two patterns: independent local IO and round-robin read-after-write
 	07/24/2012: for ZHT values, update PATH_MAX to ZHT_MAX_BUFF; found a ZHT bug for long value (>=1K); tested IOR on Fedora and HEC; create test script and pass on 1 node 
 	07/22/2012: fixed a bug in ffsnet.c::_getaddr(); tested IOzone on two nodes
 	07/21/2012: update ZHT for new _lookup() signature and return code, restructure code and update Makefiles

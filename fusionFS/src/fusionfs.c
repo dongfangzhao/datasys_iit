@@ -67,6 +67,9 @@ int zht_update(const char *key, const char *val)
 //	else
 //		log_msg("DFZ debug: zht_update() - key = %s, oldval = %s. \n\n", key, oldval);
 
+	/*ZHT supports update semantics now: */
+	return zht_insert(key, val);
+
 	char res[ZHT_MAX_BUFF] = {0};
 	int stat = zht_lookup(key, res);
 	if (ZHT_LOOKUP_FAIL == stat) {
@@ -478,12 +481,14 @@ int fusion_unlink(const char *path)
 	char myip[PATH_MAX] = {0};
 	net_getmyip(myip);
 	if (!strcmp(myip, oldaddr)) {
+		log_msg("\n DFZ debug: _unlink() local unlink.\n\n");
 		retstat = unlink(fpath);
 		if (retstat < 0)
 			retstat = fusion_error("fusion_unlink unlink");
 		return retstat;
 	}
 
+	log_msg("\n DFZ debug: _unlink() remote rmfile.\n\n");
 	/*or we need to remove the remote file*/
 	ffs_rmfile_c("udt", oldaddr, "9000", fpath);
 

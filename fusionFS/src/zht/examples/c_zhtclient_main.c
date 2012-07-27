@@ -46,6 +46,18 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "c_zht_lookup, return value: %lu, %s\n", n, result);
 	}
 
+	value = "new value";
+	iret = c_zht_insert2(key, value);
+	fprintf(stderr, "c_zht_insert, return code: %d\n", iret);
+
+
+	result = (char*) calloc(LOOKUP_SIZE, sizeof(char));
+	if (result != NULL) {
+		int lret = c_zht_lookup2(key, result, &n);
+		fprintf(stderr, "c_zht_lookup, return code: %d\n", lret);
+		fprintf(stderr, "c_zht_lookup, return value: %lu, %s\n", n, result);
+	}
+
 	const char key2 = "nonexistent_key";
 	int rret = c_zht_remove2(key);
 	fprintf(stderr, "c_zht_remove, return code: %d\n", rret);
