@@ -67,6 +67,17 @@ int zht_update(const char *key, const char *val)
 //	else
 //		log_msg("DFZ debug: zht_update() - key = %s, oldval = %s. \n\n", key, oldval);
 
+	char res[ZHT_MAX_BUFF] = {0};
+	int stat = zht_lookup(key, res);
+	if (ZHT_LOOKUP_FAIL == stat) {
+		int insert_res = zht_insert(key, val);
+		if (insert_res) {
+			log_msg("DFZ debug: zht_update() _insert() failed code %d. \n\n", insert_res);
+			return -1;
+		}
+		return 0;
+	}
+
 	int remove_res = zht_remove(key);
 	 log_msg("DFZ debug: zht_update() - remove_res = %d. \n\n", remove_res);
 
@@ -130,6 +141,11 @@ int zht_delete(const char *key, const char *val)
 	strcat(search, " ");
 
 	char *pch = strstr(oldval, search);
+	
+	/*if for some reason val doesn't exist, we are doen here*/
+	if (!pch)
+		return 0;	
+	
 	strncpy(newval, oldval, pch - oldval);
 	strcat(newval, " ");
 	strcat(newval, pch + strlen(search));
@@ -833,13 +849,15 @@ int fusion_release(const char *path, struct fuse_file_info *fi)
 		/*TODO: potentially, need to update the parent directory in ZHT
 		 * because the physical directory is also created in the new node*/
 
-		log_msg("\n=========DFZ debug _release(): %s unlinked from %s. \n\n", fpath, oldip);
-
 		/*remove the file from its old node*/
-		ffs_rmfile_c("udt", oldip, "9000", fpath);
-
-		log_msg("\n=========DFZ debug _release(): %s unlinked from %s. \n\n", fpath, oldip);
-
+		/******************************************************************************
+		 * DFZ: I want a more conservative way to clean dirty copies, so the following
+		 * remote removal is deferred for now.
+		 *
+		 * In other words just like the redundant directories, dirty files will be
+		 * removed when its parent directory is removed from ZHT
+		 * *******************************************************************************/
+//		ffs_rmfile_c("udt", oldip, "9000", fpath);
 	}
 	else { /*read-only file*/
 		/* we don't want o keep a redundant copy in local node to

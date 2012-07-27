@@ -27,8 +27,8 @@ int main(int argc, char **argv) {
 
 	c_zht_init(argv[1], argv[2], useTCP); //neighbor zht.cfg TCP
 
-	const char *key = "hello";
-	const char *value = "zht";
+	const char *key = "/testFile.00000001";
+	const char *value = "192.168.1.23";
 
 	const char *largeKey = "keyofLargeValue";
 	char largeVal[1024] = {0};
@@ -37,8 +37,6 @@ int main(int argc, char **argv) {
 	int iret = c_zht_insert2(key, value);
 	fprintf(stderr, "c_zht_insert, return code: %d\n", iret);
 
-	iret = c_zht_insert2(largeKey, largeVal);
-	fprintf(stderr, "c_zht_insert ---->DFZ: 1K_val test, return code: %d\n", iret);
 
 	size_t n;
 	char *result = (char*) calloc(LOOKUP_SIZE, sizeof(char));
@@ -48,6 +46,7 @@ int main(int argc, char **argv) {
 		fprintf(stderr, "c_zht_lookup, return value: %lu, %s\n", n, result);
 	}
 
+	const char key2 = "nonexistent_key";
 	int rret = c_zht_remove2(key);
 	fprintf(stderr, "c_zht_remove, return code: %d\n", rret);
 
