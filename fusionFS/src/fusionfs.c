@@ -26,6 +26,7 @@
  * 		gcc -g -Wall `pkg-config fuse --cflags` -c fusionfs.c -L./udt4_c/ffsnet -lffsnet_bridger
  */
 #include "./ffsnet/ffsnet.h"
+#include "./gbuf/metac.pb-c.h"
 #include "params.h"
 #include "util.h"
 
@@ -1441,6 +1442,46 @@ int main(int argc, char *argv[]) {
 
 	argv[i] = argv[i + 1];
 	argc--;
+
+	/*
+	 * DFZ: test gbuf starts
+	 */
+	printf("\n=====Start testing Google Protocol Buffer=====\n\n");
+	size_t size = 0, size2 = 0;
+
+	Package pkg = PACKAGE__INIT;
+	Package *pkg_rtn;
+
+	/* test data */
+	pkg.has_replicano = 1; /* This is in need if this int32 is optional */
+	pkg.replicano = 5;
+	pkg.has_operation = 1;
+	pkg.operation = 3;
+	pkg.virtualpath = "mykey";
+	pkg.realfullpath = "mypathname";
+
+	/* pack the data */
+	size = package__get_packed_size(&pkg);
+	unsigned char *packed = malloc(size);
+	size2 = package__pack(&pkg, packed);
+
+	printf("\n=====DFZ debug gbuf: packed = %s. \n\n", packed);
+
+	/* unpack the data */
+	pkg_rtn = package__unpack(NULL, size, packed);
+
+	/* verify the matchings */
+	printf("dfz debug: pkg_rtn->replicano = %d \n", pkg_rtn->replicano);
+	printf("dfz debug: pkg_rtn->operation = %d \n", pkg_rtn->operation);
+	printf("dfz debug: pkg_rtn->virtualpath = %s \n", pkg_rtn->virtualpath);
+	printf("dfz debug: pkg_rtn->realfullpath = %s \n", pkg_rtn->realfullpath);
+
+	package__free_unpacked(pkg_rtn, NULL);
+	free(packed);
+	printf("\n=====Finish testing Google Protocol Buffer=====\n\n");
+	/*
+	 *  DFZ: test gbuf ends
+	 */
 
 	/* DFZ: initialize the hash table */
 	zht_init();

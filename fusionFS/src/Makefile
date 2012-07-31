@@ -1,5 +1,5 @@
-fusionfs : fusionfs.o util.o log.o
-	gcc -g `pkg-config fuse --libs` -o fusionfs fusionfs.o util.o log.o -L./ffsnet -lffsnet_bridger -L./zht/lib -lzht -lstdc++ -lprotobuf -lpthread
+fusionfs : fusionfs.o util.o log.o metac.pb-c.o
+	gcc -g `pkg-config fuse --libs` -o fusionfs fusionfs.o util.o log.o -L./ffsnet -lffsnet_bridger -L./zht/lib -lzht -lstdc++ -lprotobuf -lpthread -L/usr/local/lib -lprotobuf-c -I/usr/local/include/google/protobuf-c metac.pb-c.o 
 
 fusionfs.o : fusionfs.c log.h params.h util.h
 	gcc -g -Wall `pkg-config fuse --cflags` -c fusionfs.c -L./ffsnet -lffsnet_bridger 
@@ -10,8 +10,11 @@ util.o : util.c log.h params.h
 log.o : log.c log.h params.h
 	gcc -g -Wall `pkg-config fuse --cflags` -c log.c
 
+metac.pb-c.o : gbuf/metac.pb-c.c gbuf/metac.pb-c.h
+	gcc -g -Wall -L/usr/local/lib -lprotobuf-c -I/usr/local/include/google/protobuf-c -c gbuf/metac.pb-c.c
+
 clean:
-	rm -f fusionfs *.o
+	rm -f fusionfs *.o 
 
 dist:
 	rm -rf fuse-tutorial/

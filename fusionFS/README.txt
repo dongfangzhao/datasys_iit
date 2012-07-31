@@ -61,6 +61,7 @@ How to test fusionfs with IOR:
 		only conduct read-only experiments with IOR.
 
 Update history:
+	07/31/2012: add C version Google Protocol Buffer (/src/gbuf) to update <k,v> pair to serialized string; syntactically tested, i.e. compiled and passed simple serialization; waiting for new ZHT interface
 	07/26/2012: add metadata benchmark; tested IOR on 10 nodes with two patterns: independent local IO and round-robin read-after-write
 	07/24/2012: for ZHT values, update PATH_MAX to ZHT_MAX_BUFF; found a ZHT bug for long value (>=1K); tested IOR on Fedora and HEC; create test script and pass on 1 node 
 	07/22/2012: fixed a bug in ffsnet.c::_getaddr(); tested IOzone on two nodes
@@ -76,6 +77,7 @@ Update history:
 	05/22/2012: read/write with SCP
 
 TODO:
+	*[Important] Update <k,v> to serialized string
 	*[Important] Deploy FusionFS on 1K node
 	*[Important] Add lock/unlock to ZHT to synchronize concurrent accesses	
 	*[Important] Add data replicas
