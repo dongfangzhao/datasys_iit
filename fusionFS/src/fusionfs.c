@@ -26,7 +26,7 @@
  * 		gcc -g -Wall `pkg-config fuse --cflags` -c fusionfs.c -L./udt4_c/ffsnet -lffsnet_bridger
  */
 #include "./ffsnet/ffsnet.h"
-#include "./gbuf/metac.pb-c.h"
+#include "./zht/inc/meta.pb-c.h"
 #include "params.h"
 #include "util.h"
 
@@ -1464,6 +1464,7 @@ int main(int argc, char *argv[]) {
 	size = package__get_packed_size(&pkg);
 	unsigned char *packed = malloc(size);
 	size2 = package__pack(&pkg, packed);
+	assert(size == size2);
 
 	printf("\n=====DFZ debug gbuf: packed = %s. \n\n", packed);
 

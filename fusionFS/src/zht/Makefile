@@ -7,13 +7,13 @@ CC=gcc
 CPPFLAGS=-Xlinker -zmuldefs
 CFLAGS=-Llib -L/usr/local/lib -Iinc
 LFLAGS=-lzht
-LFLAGS+=-lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotoc
+LFLAGS+=-lstdc++ -lrt -lpthread -lm -lc -lprotobuf -lprotobuf-c
 
-PROTOBUF_HOME=/usr/local/include/google/protobuf #your Google Protobuf location here :) (Default is:/usr/local/include/google/protobuf)
+PROTOBUF_HOME=/usr/local/include/google/protobuf #your Google Protobuf location here :) (Default is:/usr/local/include/google/protobuf) Additional NOTE: This may be useless if you added PROTOBUF to your LD_LIBRARY_PATH
 
 #SOURCES=$(wildcard src/common/*.cpp)
 #OBJECTS=$(SOURCES:.cpp=.o)
-OBJECTS=obj/meta.pb.o obj/net_util.o obj/novoht.o obj/zht_util.o obj/lru_cache.o
+OBJECTS=obj/meta.pb.o obj/meta.pb-c.o obj/net_util.o obj/novoht.o obj/zht_util.o obj/lru_cache.o
 
 CFLAGS+=-I$(PROTOBUF_HOME)
 
@@ -46,16 +46,26 @@ obj:
 
 clients: src/cpp_zhtclient.cpp src/c_zhtclient.cpp
 	$(CXX) $(CPPFLAGS) $(CFLAGS) -c src/cpp_zhtclient.cpp -o obj/cpp_zhtclient.o
+	$(CXX) $(CPPFLAGS) $(CFLAGS) -c src/c_zhtclientStd.cpp -o obj/c_zhtclientStd.o
 	$(CXX) $(CPPFLAGS) $(CFLAGS) -c src/c_zhtclient.cpp -o obj/c_zhtclient.o
+
 
 obj/%.o: src/common/%.cpp obj
 	$(CXX) $(CPPFLAGS) $(CFLAGS) -c src/common/$*.cpp -o obj/$*.o
+
+obj/meta.pb-c.o: src/common/meta.pb-c.c
+	$(CC) $(CFLAGS) -c src/common/meta.pb-c.c -o obj/meta.pb-c.o
 
 gProto: src/misc/meta.proto
 	rm src/common/*.pb.cpp inc/*.pb.h
 	protoc -I=src/misc/ --cpp_out=src/common src/misc/meta.proto
 	mv src/common/*.h inc/
 	rename 's/\.cc/.cpp/' src/common/*.cc
+	
+gProto-c: src/misc/meta.proto
+	rm src/common/*.pb-c.c inc/*.pb-c.h
+	protoc-c -I=src/misc/ --c_out=src/common src/misc/meta.proto
+	mv src/common/*.h inc/
 	
 clean:
 	rm -rf obj
