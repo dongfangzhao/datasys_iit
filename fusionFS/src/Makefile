@@ -5,7 +5,7 @@ fusionfs.o : fusionfs.c log.h params.h util.h
 	gcc -g -Wall `pkg-config fuse --cflags` -c fusionfs.c -L./ffsnet -lffsnet_bridger 
 	
 util.o : util.c log.h params.h
-	gcc -g -Wall `pkg-config fuse --cflags` -c util.c -L./zht/lib -lzht -lstdc++ -lprotobuf -lpthread	
+	gcc -g -Wall `pkg-config fuse --cflags` -c util.c -L./zht/lib -lzht -lstdc++ -lprotobuf -lprotobuf-c -lpthread	
 
 log.o : log.c log.h params.h
 	gcc -g -Wall `pkg-config fuse --cflags` -c log.c

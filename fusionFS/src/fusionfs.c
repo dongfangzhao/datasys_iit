@@ -249,6 +249,7 @@ int fusion_getattr(const char *path, struct stat *statbuf)
 
 	}
 	else { /* if file exists in ZHT */
+		/*TODO: why doesn't the log show up any res her??? maybe insert doesn't succeed */
 		log_msg("\n ===========DFZ debug: _getattr() zht_lookup() = %s. \n\n", res);
 
 		if (access(fpath, F_OK)) { /*if it isn't on this node, copy it over*/
@@ -1257,7 +1258,7 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 	/*if <path> exists in ZHT, we should return at this point*/
 	char res[ZHT_MAX_BUFF] = {0};
 	int stat = zht_lookup(path, res);
-	if (ZHT_LOOKUP_FAIL != stat) {
+	if (ZHT_LOOKUP_FAIL == stat) {
 		log_msg("\n================DFZ ERROR: file already exists. \n");
 		return -1;
 	}
@@ -1281,13 +1282,13 @@ int fusion_create(const char *path, mode_t mode, struct fuse_file_info *fi)
 		log_msg("\n================DFZ ERROR: no parent path exists. \n");
 		return -1;
 	}
-	log_msg("\n================DFZ debug: oldval = %s \n", oldval);
+	log_msg("\n================DFZ debug: oldval = %s. \n", oldval);
 	zht_append(dirname, pch + 1);
 
 	/*insert <path, ip_addr> into ZHT */
 	char addr[PATH_MAX] = {0};
 	net_getmyip(addr);
-	log_msg("\n================DFZ debug _create(): addr = %s \n", addr);
+	log_msg("\n================DFZ debug _create(): addr = %s. \n", addr);
 	if (zht_insert(path, addr))
 		log_msg("\n================ERROR _create(): failed to insert <%s, %s> to ZHT. \n", path, addr);
 

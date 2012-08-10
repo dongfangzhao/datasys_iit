@@ -1,4 +1,5 @@
 /**
+ * DFZ, 08/08/2012: updated with serialization interface
  *
  * DFZ, 07/14/2012: change zht_lookup() interface
  *
@@ -36,7 +37,7 @@
 #include <stdbool.h>
 #include <errno.h>
 #include "./zht/inc/c_zhtclient.h"
-
+#include "./zht/inc/meta.pb-c.h"
 
 #include "log.h"
 #include "util.h"
@@ -116,24 +117,102 @@ int zht_free()
 
 int zht_insert(const char *key, const char *value)
 {
-	return c_zht_insert2(key, value);
+//	return c_zht_insert2(key, value);
+	Package package = PACKAGE__INIT; // Package
+	package.virtualpath = (char*)key;
+	package.realfullpath = (char*)value;
+	package.has_operation = true;
+	package.operation = 3; //1 for look up, 2 for remove, 3 for insert
+
+	char *buf; // Buffer to store serialized data
+	unsigned len; // Length of serialized data
+
+	len = package__get_packed_size(&package);
+	buf = (char*) calloc(len, sizeof(char));
+	package__pack(&package, (uint8_t *)buf);
+
+	int ret = c_zht_insert(buf);
+	if (ret)
+		fprintf(stderr, "c_zht_insert, return code %d. \n", ret);
+
+	free(buf); // Free the allocated serialized buffer
+
+	return 0;
 }
 
-/* DFZ: This is not in use for now, need to wait for Xiaobing to change the
- * interface
- * */
 int zht_lookup(const char *key, char *val)
 {
-	/* TODO: val should not have the &, waiting for Xiaobing to update*/
 //	return c_zht_lookup2(key, val);
-	size_t len;
-	return c_zht_lookup2(key, val, &len);
+//	size_t len;
+//	return c_zht_lookup2(key, val, &len);
+
+	char *buf; // Buffer to store serialized data
+	unsigned len; // Length of serialized data
+	char result[ZHT_MAX_BUFF] = {0}; //return result
+	size_t ln; //return length
+
+	Package package = PACKAGE__INIT; // Package
+	package.virtualpath = (char*)key;
+	package.realfullpath = "";
+	package.has_operation = true;
+	package.operation = 1; //1 for look up, 2 for remove, 3 for insert
+
+	len = package__get_packed_size(&package);
+	buf = (char*) calloc(len, sizeof(char));
+	package__pack(&package, (uint8_t *)buf);
+
+	int lret = c_zht_lookup(buf, result, &ln);
+	if (lret == 0 && ln > 0) {
+		Package *lkPackage;
+//		char *lkBuf = (char*) calloc(ln, sizeof(char));
+//		char lkBuf[ln + 1] = {0};
+//		strncpy(lkBuf, result, ln);
+		lkPackage = package__unpack(NULL, ln, (const uint8_t *)result);
+
+		if (lkPackage == NULL) {
+			fprintf(stderr, "error unpacking lookup result\n");
+		}
+//		else {
+//			fprintf(stderr,
+//					"c_zht_lookup, return {key}:{value} ==>\n{%s}:{%s}\n",
+//					lkPackage->virtualpath, lkPackage->realfullpath);
+//		}
+
+//		free(lkBuf);
+
+		strcpy(val, lkPackage->realfullpath);
+		package__free_unpacked(lkPackage, NULL);
+	}
+
+	free(buf); // Free the allocated serialized buffer
+
 	return 0;
 }
 
 int zht_remove(const char *key)
 {
-	return c_zht_remove2(key);
+//	return c_zht_remove2(key);
+
+	Package package = PACKAGE__INIT; // Package
+	package.virtualpath = (char*)key;
+	package.realfullpath = "";
+	package.has_operation = true;
+	package.operation = 2; //1 for look up, 2 for remove, 3 for insert
+
+	char *buf; // Buffer to store serialized data
+	unsigned len; // Length of serialized data
+
+	len = package__get_packed_size(&package);
+	buf = (char*) calloc(len, sizeof(char));
+	package__pack(&package, (uint8_t *)buf);
+
+	int ret = c_zht_remove(buf);
+	if (ret)
+		fprintf(stderr, "c_zht_remove, return code %d\n", ret);
+
+	free(buf); // Free the allocated serialized buffer
+
+	return 0;
 }
 
 /**

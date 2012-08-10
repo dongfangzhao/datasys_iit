@@ -61,6 +61,7 @@ How to test fusionfs with IOR:
 		only conduct read-only experiments with IOR.
 
 Update history:
+	08/09/2012: update zht_operations with new serialized interfaces; passed testing scripts
 	08/03/2012: updated to latest ZHT package with Package interface (not tested)
 	07/31/2012: add C version Google Protocol Buffer (/src/gbuf) to update <k,v> pair to serialized string; syntactically tested, i.e. compiled and passed simple serialization; waiting for new ZHT interface
 	07/26/2012: add metadata benchmark; tested IOR on 10 nodes with two patterns: independent local IO and round-robin read-after-write
@@ -89,3 +90,4 @@ Note:
     *If you make your desktop run ffsnetd service, please make sure no firewall is blocking this service from outside request.
 		- In Fedora, you can turn off firewall by `sudo service iptables stop`
 		- Note that there's no firewall inside IBM Bluegene
+
