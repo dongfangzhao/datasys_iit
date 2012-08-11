@@ -1,5 +1,31 @@
 Author: dongfang.zhao@hawk.iit.edu
 
+Update history:
+	08/10/2012: add zht_get_openmode() and zht_set_openmode() in util.c, not tested. Will be tested with locking update on fusionfs.c
+	08/09/2012: update zht_operations with new serialized interfaces; passed testing scripts
+	08/03/2012: updated to latest ZHT package with Package interface (not tested)
+	07/31/2012: add C version Google Protocol Buffer (/src/gbuf) to update <k,v> pair to serialized string; syntactically tested, i.e. compiled and passed simple serialization; waiting for new ZHT interface
+	07/26/2012: add metadata benchmark; tested IOR on 10 nodes with two patterns: independent local IO and round-robin read-after-write
+	07/24/2012: for ZHT values, update PATH_MAX to ZHT_MAX_BUFF; found a ZHT bug for long value (>=1K); tested IOR on Fedora and HEC; create test script and pass on 1 node 
+	07/22/2012: fixed a bug in ffsnet.c::_getaddr(); tested IOzone on two nodes
+	07/21/2012: update ZHT for new _lookup() signature and return code, restructure code and update Makefiles
+	07/20/2012: major changes, tested on two nodes Fedora and Fusion
+	07/17/2012: remote file removal supported and tested on two nodes
+	07/16/2012: all one-node test cases have passed over two nodes - Fedora and Fusion.
+	07/15/2012: started testing on single node (test_plan.txt added): directory passed; files on root directory passed 
+	07/09/2012: clean up the warnings
+	07/05/2012: hsearch replaced by ZHT
+  	06/27/2012: read with UDT
+	06/01/2012: read/write with LFTP
+	05/22/2012: read/write with SCP
+
+TODO:
+	*[Important] Add lock/unlock to ZHT to synchronize concurrent accesses	
+	*[Important] Add data replicas
+	*[Important] Deploy FusionFS on 1K node
+	*[Nice to Have] Instead of moving primary copy, support push-back of updates
+	*[Nice to have] Support more POSIX interfaces, e.g. rename(), link(), slink() etc
+	
 What is FusionFS
 	- In short, FusionFS is a completely distributed file system, that said, nothing (at all) is centralized
 		including meta data management. 
@@ -59,32 +85,6 @@ How to test fusionfs with IOR:
 	IMPORTANT NOTE: In IOR, when it claims it "reads" a file, it indeed opens the file with	mode 02. 
 		Mode 02 means read AND write. Therefore, write-write locks are expected even if you
 		only conduct read-only experiments with IOR.
-
-Update history:
-	08/09/2012: update zht_operations with new serialized interfaces; passed testing scripts
-	08/03/2012: updated to latest ZHT package with Package interface (not tested)
-	07/31/2012: add C version Google Protocol Buffer (/src/gbuf) to update <k,v> pair to serialized string; syntactically tested, i.e. compiled and passed simple serialization; waiting for new ZHT interface
-	07/26/2012: add metadata benchmark; tested IOR on 10 nodes with two patterns: independent local IO and round-robin read-after-write
-	07/24/2012: for ZHT values, update PATH_MAX to ZHT_MAX_BUFF; found a ZHT bug for long value (>=1K); tested IOR on Fedora and HEC; create test script and pass on 1 node 
-	07/22/2012: fixed a bug in ffsnet.c::_getaddr(); tested IOzone on two nodes
-	07/21/2012: update ZHT for new _lookup() signature and return code, restructure code and update Makefiles
-	07/20/2012: major changes, tested on two nodes Fedora and Fusion
-	07/17/2012: remote file removal supported and tested on two nodes
-	07/16/2012: all one-node test cases have passed over two nodes - Fedora and Fusion.
-	07/15/2012: started testing on single node (test_plan.txt added): directory passed; files on root directory passed 
-	07/09/2012: clean up the warnings
-	07/05/2012: hsearch replaced by ZHT
-  	06/27/2012: read with UDT
-	06/01/2012: read/write with LFTP
-	05/22/2012: read/write with SCP
-
-TODO:
-	*[Important] Update <k,v> to serialized string
-	*[Important] Deploy FusionFS on 1K node
-	*[Important] Add lock/unlock to ZHT to synchronize concurrent accesses	
-	*[Important] Add data replicas
-	*[Nice to Have] Instead of moving primary copy, support push-back of updates
-	*[Nice to have] Support more POSIX interfaces, e.g. rename(), link(), slink() etc
 	
 Note:
     *If you make your desktop run ffsnetd service, please make sure no firewall is blocking this service from outside request.

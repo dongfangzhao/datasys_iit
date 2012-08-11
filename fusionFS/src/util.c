@@ -89,9 +89,112 @@ int net_getmyip(char *addr) {
 }
 
 /**
- *******************************************************************
- ** The following five operations are imported from ZHT utilities **
- *******************************************************************
+ *********************************************************
+ *********************************************************
+ ** The followings are for extended metadata operations **
+ *********************************************************
+ *********************************************************
+ */
+
+/*
+ * TODO: refactor the common code for packing and unpacking a Package
+ */
+
+/**
+ * Desc: get the open mode of the file:
+ * Return: 000 - not open; 001 - read only; 010 - write only; 011 - read and write; -1 - failed
+ */
+int zht_get_openmode(const char *virtualfname)
+{
+	char *buf; // Buffer to store serialized data
+	unsigned len; // Length of serialized data
+	char result[ZHT_MAX_BUFF] = {0}; //return result
+	size_t ln; //return length
+	int rtn;
+
+	Package package = PACKAGE__INIT; // Package
+	package.virtualpath = (char*)virtualfname;
+	package.realfullpath = "";
+	package.has_operation = true;
+	package.operation = 1; //1 for look up, 2 for remove, 3 for insert
+
+	len = package__get_packed_size(&package);
+	buf = (char*) calloc(len, sizeof(char));
+	package__pack(&package, (uint8_t *)buf);
+
+	int lret = c_zht_lookup(buf, result, &ln);
+	if (lret == 0 && ln > 0) {
+		Package *lkPackage;
+		lkPackage = package__unpack(NULL, ln, (const uint8_t *)result);
+
+		if (lkPackage == NULL) {
+			fprintf(stderr, "error unpacking lookup result\n");
+		}
+
+		rtn = lkPackage->openmode;
+		package__free_unpacked(lkPackage, NULL);
+	}
+
+	free(buf); // Free the allocated serialized buffer
+
+	return rtn;
+}
+
+/**
+ * Desc: set the open mode of the file
+ * Return: 0 - success, 1 - failed
+ */
+int zht_set_openmode(const char *virtualfname, int openmode)
+{
+	char *buf; // Buffer to store serialized data
+	unsigned len; // Length of serialized data
+	char result[ZHT_MAX_BUFF] = {0}; //return result
+	size_t ln; //return length
+
+	Package package = PACKAGE__INIT; // Package
+	package.virtualpath = (char*)virtualfname;
+	package.realfullpath = "";
+	package.has_operation = true;
+	package.operation = 1; //1 for look up, 2 for remove, 3 for insert
+
+	len = package__get_packed_size(&package);
+	buf = (char*) calloc(len, sizeof(char));
+	package__pack(&package, (uint8_t *)buf);
+
+	int lret = c_zht_lookup(buf, result, &ln);
+	if (lret == 0 && ln > 0) {
+		Package *lkPackage;
+		lkPackage = package__unpack(NULL, ln, (const uint8_t *)result);
+
+		if (lkPackage == NULL) {
+			fprintf(stderr, "error unpacking lookup result\n");
+		}
+
+		/*update the openmode of the package*/
+		lkPackage->openmode = openmode;
+		lkPackage->operation = 3; //1 for look up, 2 for remove, 3 for insert
+		int len2 = package__get_packed_size(lkPackage);
+		char *buf2 = calloc(len2, sizeof(char));
+		package__pack(lkPackage, (uint8_t *)buf2);
+		int iret = c_zht_insert(buf2);
+		if (iret) {
+			fprintf(stderr, "c_zht_insert, return code %d. \n", iret);
+			return 1;
+		}
+		free(buf2);
+
+		package__free_unpacked(lkPackage, NULL);
+	}
+
+	free(buf); // Free the allocated serialized buffer
+
+	return 0;
+}
+
+/**
+ **************************************************************
+ ** The following five operations are 5 basic ZHT operations **
+ **************************************************************
  */
 
 int zht_init()

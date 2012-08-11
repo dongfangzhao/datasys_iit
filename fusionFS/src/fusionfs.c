@@ -249,7 +249,6 @@ int fusion_getattr(const char *path, struct stat *statbuf)
 
 	}
 	else { /* if file exists in ZHT */
-		/*TODO: why doesn't the log show up any res her??? maybe insert doesn't succeed */
 		log_msg("\n ===========DFZ debug: _getattr() zht_lookup() = %s. \n\n", res);
 
 		if (access(fpath, F_OK)) { /*if it isn't on this node, copy it over*/
