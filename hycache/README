@@ -1,0 +1,12 @@
+Mount your SSD first, e.g. in Fedora:
+	sudo mount /dev/mapper/sil_biabahcbebch ./rootdir/ssd 
+
+
+./stop
+./reset
+make clean
+make
+./start
+cd schfs_mount
+/home/dongfang/cs553/benchmark/standard/iozone3_398/src/current/iozone -ape -s 64k
+/home/dongfang/cs553/benchmark/standard/iozone3_398/src/current/iozone -ape -s 2m 
